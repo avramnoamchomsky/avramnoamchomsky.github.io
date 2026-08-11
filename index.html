@@ -4,43 +4,370 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Chomsky</title>
+  <meta
+    name="description"
+    content="Chomsky — Embedded systems, Linux, and low-level software."
+  >
+
+  <title>Chomsky — Embedded & Linux</title>
 
   <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
 </head>
 
 <body>
+
+  <div class="background-grid"></div>
+  <div class="glow glow-one"></div>
+  <div class="glow glow-two"></div>
+
+  <!-- Navigation -->
+  <header class="navbar">
+    <a class="logo" href="#home">
+      <span class="logo-mark">&gt;_</span>
+      <span>chomsky</span>
+    </a>
+
+    <nav>
+      <a href="#about">About</a>
+      <a href="#focus">Focus</a>
+      <a href="#projects">Projects</a>
+
+      <a
+        class="github-link"
+        href="https://github.com/avramnoamchomsky"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        GitHub ↗
+      </a>
+    </nav>
+  </header>
+
   <main>
-    <h1>Hi, I'm Chomsky 👋</h1>
 
-    <p>
-      I'm interested in Linux, embedded systems, low-level programming,
-      and understanding how computers work close to the hardware.
-    </p>
+    <!-- Hero -->
+    <section class="hero" id="home">
 
-    <h2>Interests</h2>
+      <div class="hero-content">
 
-    <ul>
-      <li>Embedded Linux</li>
-      <li>Embedded systems</li>
-      <li>Linux</li>
-      <li>Low-level programming</li>
-      <li>Computer architecture</li>
-      <li>Operating systems</li>
-    </ul>
+        <div class="status">
+          <span class="status-dot"></span>
+          Learning • Building • Exploring
+        </div>
 
-    <h2>Projects</h2>
+        <p class="eyebrow">HELLO, WORLD.</p>
 
-    <p>
-      I'm currently learning and building projects.
-      More will be added here over time.
-    </p>
+        <h1>
+          Exploring the space
+          <br>
+          between
+          <span class="gradient-text">hardware</span>
+          and
+          <span class="gradient-text">Linux.</span>
+        </h1>
 
-    <h2>Links</h2>
+        <p class="hero-description">
+          I'm Chomsky. I'm interested in embedded systems,
+          Linux, low-level programming, computer architecture,
+          and understanding what happens beneath the abstractions.
+        </p>
 
-    <p>
-      <a href="https://github.com/avramnoamchomsky">GitHub</a>
-    </p>
+        <div class="hero-actions">
+          <a class="button primary" href="#projects">
+            Explore my work
+            <span>↓</span>
+          </a>
+
+          <a
+            class="button secondary"
+            href="https://github.com/avramnoamchomsky"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            GitHub
+            <span>↗</span>
+          </a>
+        </div>
+
+      </div>
+
+      <!-- Terminal card -->
+      <div class="terminal-card">
+
+        <div class="terminal-topbar">
+          <div class="terminal-dots">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+
+          <span>chomsky@nixos</span>
+        </div>
+
+        <div class="terminal-body">
+          <p>
+            <span class="prompt">❯</span>
+            <span class="command">whoami</span>
+          </p>
+
+          <p class="output">
+            Linux enthusiast & embedded systems learner
+          </p>
+
+          <br>
+
+          <p>
+            <span class="prompt">❯</span>
+            <span class="command">cat interests.txt</span>
+          </p>
+
+          <p class="output">
+            embedded-linux<br>
+            low-level-programming<br>
+            computer-architecture<br>
+            operating-systems<br>
+            open-source
+          </p>
+
+          <br>
+
+          <p>
+            <span class="prompt">❯</span>
+            <span class="cursor">█</span>
+          </p>
+        </div>
+
+      </div>
+
+      <div class="scroll-indicator">
+        <span>SCROLL</span>
+        <div class="scroll-line"></div>
+      </div>
+
+    </section>
+
+
+    <!-- About -->
+    <section class="section reveal" id="about">
+
+      <div class="section-label">
+        <span>01</span>
+        ABOUT
+      </div>
+
+      <div class="about-grid">
+
+        <h2>
+          I like understanding
+          <span class="muted">how things actually work.</span>
+        </h2>
+
+        <div class="about-copy">
+          <p>
+            I'm interested in the boundary between software and hardware:
+            how operating systems manage machines, how embedded devices
+            execute code, and how Linux turns hardware into a usable system.
+          </p>
+
+          <p>
+            I use NixOS and enjoy building my environment declaratively
+            while learning Git, systems programming, and embedded development.
+          </p>
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- Focus -->
+    <section class="section reveal" id="focus">
+
+      <div class="section-label">
+        <span>02</span>
+        FOCUS
+      </div>
+
+      <div class="section-heading">
+        <h2>What I'm exploring</h2>
+        <p>Areas that keep pulling me deeper.</p>
+      </div>
+
+      <div class="card-grid">
+
+        <article class="focus-card">
+          <div class="card-number">01</div>
+          <div class="card-icon">◈</div>
+
+          <h3>Embedded Systems</h3>
+
+          <p>
+            Microcontrollers, hardware interfaces,
+            firmware and resource-constrained computing.
+          </p>
+
+          <div class="card-tags">
+            <span>MCU</span>
+            <span>Firmware</span>
+            <span>Hardware</span>
+          </div>
+        </article>
+
+
+        <article class="focus-card featured">
+          <div class="card-number">02</div>
+          <div class="card-icon">λ</div>
+
+          <h3>Linux</h3>
+
+          <p>
+            Operating systems, NixOS, system configuration,
+            userspace and eventually the Linux kernel.
+          </p>
+
+          <div class="card-tags">
+            <span>NixOS</span>
+            <span>Linux</span>
+            <span>Systems</span>
+          </div>
+        </article>
+
+
+        <article class="focus-card">
+          <div class="card-number">03</div>
+          <div class="card-icon">&lt;/&gt;</div>
+
+          <h3>Low-Level Software</h3>
+
+          <p>
+            Understanding memory, architecture,
+            compilers and software close to the machine.
+          </p>
+
+          <div class="card-tags">
+            <span>C</span>
+            <span>Memory</span>
+            <span>Architecture</span>
+          </div>
+        </article>
+
+      </div>
+
+    </section>
+
+
+    <!-- Projects -->
+    <section class="section reveal" id="projects">
+
+      <div class="section-label">
+        <span>03</span>
+        PROJECTS
+      </div>
+
+      <div class="section-heading">
+        <h2>Things I'm building</h2>
+        <p>The collection will grow as I learn.</p>
+      </div>
+
+      <div class="projects">
+
+        <a
+          class="project"
+          href="https://github.com/avramnoamchomsky"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <div class="project-info">
+            <span class="project-type">SYSTEM CONFIGURATION</span>
+
+            <h3>NixOS Configuration</h3>
+
+            <p>
+              My evolving declarative NixOS setup and experiments.
+            </p>
+          </div>
+
+          <span class="project-arrow">↗</span>
+        </a>
+
+
+        <div class="project">
+          <div class="project-info">
+            <span class="project-type">COMING SOON</span>
+
+            <h3>Embedded Projects</h3>
+
+            <p>
+              Firmware and hardware experiments will appear here
+              as I progress.
+            </p>
+          </div>
+
+          <span class="project-arrow muted-arrow">→</span>
+        </div>
+
+
+        <div class="project">
+          <div class="project-info">
+            <span class="project-type">THIS WEBSITE</span>
+
+            <h3>Personal Site</h3>
+
+            <p>
+              Built from scratch with HTML, CSS and JavaScript.
+            </p>
+          </div>
+
+          <span class="project-arrow">●</span>
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- Stack -->
+    <section class="section stack-section reveal">
+
+      <div class="section-label">
+        <span>04</span>
+        ENVIRONMENT
+      </div>
+
+      <h2>Current environment</h2>
+
+      <div class="stack-list">
+        <span>NixOS</span>
+        <span>Linux</span>
+        <span>Nix</span>
+        <span>Git</span>
+        <span>GitHub</span>
+        <span>VS Code</span>
+        <span>niri</span>
+      </div>
+
+    </section>
+
   </main>
+
+
+  <footer>
+
+    <div>
+      <span class="footer-logo">&gt;_</span>
+      Chomsky
+    </div>
+
+    <p>
+      Embedded systems • Linux • Low-level software
+    </p>
+
+    <p>
+      © <span id="year"></span>
+    </p>
+
+  </footer>
+
 </body>
 </html>
