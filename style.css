@@ -33,11 +33,9 @@ body {
   margin: 0;
 
   background:
-    radial-gradient(
-      circle at 50% 0%,
+    radial-gradient(circle at 50% 0%,
       rgba(39, 128, 130, 0.12),
-      transparent 40%
-    ),
+      transparent 40%),
     var(--bg);
 
   color: var(--text);
@@ -73,24 +71,18 @@ a {
   pointer-events: none;
 
   background-image:
-    linear-gradient(
-      rgba(255,255,255,0.025) 1px,
-      transparent 1px
-    ),
-    linear-gradient(
-      90deg,
-      rgba(255,255,255,0.025) 1px,
-      transparent 1px
-    );
+    linear-gradient(rgba(255, 255, 255, 0.025) 1px,
+      transparent 1px),
+    linear-gradient(90deg,
+      rgba(255, 255, 255, 0.025) 1px,
+      transparent 1px);
 
   background-size: 70px 70px;
 
   mask-image:
-    linear-gradient(
-      to bottom,
+    linear-gradient(to bottom,
       black,
-      transparent 80%
-    );
+      transparent 80%);
 
   z-index: -3;
 }
@@ -208,7 +200,7 @@ a {
 .navbar nav a:hover {
   color: var(--text);
 
-  background: rgba(255,255,255,0.06);
+  background: rgba(255, 255, 255, 0.06);
 }
 
 
@@ -271,7 +263,7 @@ a {
 
   color: var(--text-soft);
 
-  background: rgba(255,255,255,0.025);
+  background: rgba(255, 255, 255, 0.025);
 
   font-size: 0.78rem;
 
@@ -309,9 +301,7 @@ a {
 
 .hero h1 {
   margin:
-    0.35rem
-    0
-    1.7rem;
+    0.35rem 0 1.7rem;
 
   max-width: 850px;
 
@@ -330,11 +320,9 @@ a {
   color: transparent;
 
   background:
-    linear-gradient(
-      100deg,
+    linear-gradient(100deg,
       var(--cyan),
-      var(--blue)
-    );
+      var(--blue));
 
   background-clip: text;
   -webkit-background-clip: text;
@@ -392,7 +380,7 @@ a {
 .button.secondary {
   border: 1px solid var(--border);
 
-  background: rgba(255,255,255,0.025);
+  background: rgba(255, 255, 255, 0.025);
 }
 
 
@@ -407,15 +395,13 @@ a {
   border-radius: 18px;
 
   background:
-    linear-gradient(
-      150deg,
+    linear-gradient(150deg,
       rgba(20, 31, 39, 0.9),
-      rgba(8, 11, 15, 0.96)
-    );
+      rgba(8, 11, 15, 0.96));
 
   box-shadow:
-    0 30px 100px rgba(0,0,0,0.45),
-    0 0 60px rgba(80,245,225,0.05);
+    0 30px 100px rgba(0, 0, 0, 0.45),
+    0 0 60px rgba(80, 245, 225, 0.05);
 
   transform: rotate(1deg);
 
@@ -513,30 +499,33 @@ a {
 .scroll-indicator {
   position: absolute;
 
-  bottom: 28px;
-  left: 0;
+  left: 50%;
+  bottom: 22px;
+
+  transform: translateX(-50%);
 
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 12px;
+  gap: 8px;
 
   color: #56636a;
 
-  font-size: 0.65rem;
-  letter-spacing: 0.18em;
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+
+  pointer-events: none;
 }
 
 
 .scroll-line {
-  width: 55px;
-  height: 1px;
+  width: 1px;
+  height: 42px;
 
   background:
-    linear-gradient(
-      to right,
+    linear-gradient(to bottom,
       var(--cyan),
-      transparent
-    );
+      transparent);
 }
 
 
@@ -654,11 +643,9 @@ a {
   border-radius: 22px;
 
   background:
-    linear-gradient(
-      145deg,
-      rgba(255,255,255,0.035),
-      rgba(255,255,255,0.012)
-    );
+    linear-gradient(145deg,
+      rgba(255, 255, 255, 0.035),
+      rgba(255, 255, 255, 0.012));
 
   transition:
     transform 220ms ease,
@@ -671,7 +658,7 @@ a {
   transform: translateY(-6px);
 
   border-color:
-    rgba(80,245,225,0.35);
+    rgba(80, 245, 225, 0.35);
 
   background:
     var(--surface-hover);
@@ -680,11 +667,9 @@ a {
 
 .focus-card.featured {
   background:
-    radial-gradient(
-      circle at 80% 0%,
-      rgba(80,245,225,0.11),
-      transparent 45%
-    ),
+    radial-gradient(circle at 80% 0%,
+      rgba(80, 245, 225, 0.11),
+      transparent 45%),
     var(--surface);
 }
 
@@ -707,9 +692,7 @@ a {
 
 .focus-card h3 {
   margin:
-    1.1rem
-    0
-    0.5rem;
+    1.1rem 0 0.5rem;
 
   font-size: 1.5rem;
 }
@@ -772,11 +755,9 @@ a.project:hover {
   padding-right: 20px;
 
   background:
-    linear-gradient(
-      90deg,
-      rgba(80,245,225,0.05),
-      transparent
-    );
+    linear-gradient(90deg,
+      rgba(80, 245, 225, 0.05),
+      transparent);
 }
 
 
@@ -790,8 +771,7 @@ a.project:hover {
 
 .project h3 {
   margin:
-    0.3rem
-    0;
+    0.3rem 0;
 
   font-size:
     clamp(1.6rem, 3vw, 2.8rem);
@@ -809,6 +789,14 @@ a.project:hover {
   font-size: 2rem;
 
   color: var(--cyan);
+
+  transition:
+    transform 220ms ease,
+    color 220ms ease;
+}
+
+a.project:hover .project-arrow {
+  transform: translate(5px, -5px);
 }
 
 
@@ -840,7 +828,7 @@ a.project:hover {
   border: 1px solid var(--border);
   border-radius: 999px;
 
-  background: rgba(255,255,255,0.02);
+  background: rgba(255, 255, 255, 0.02);
 
   color: #9baab1;
 }
@@ -914,16 +902,14 @@ footer {
     opacity: 0;
 
     transform:
-      translateY(35px)
-      rotate(3deg);
+      translateY(35px) rotate(3deg);
   }
 
   to {
     opacity: 1;
 
     transform:
-      translateY(0)
-      rotate(1deg);
+      translateY(0) rotate(1deg);
   }
 }
 
@@ -952,9 +938,7 @@ footer {
     gap: 3rem;
 
     padding:
-      150px
-      0
-      100px;
+      150px 0 100px;
   }
 
 
@@ -1008,6 +992,386 @@ footer {
 
     animation-duration: 0.01ms !important;
     transition-duration: 0.01ms !important;
+  }
+
+}
+
+/* ============================================
+   Interactive background
+============================================ */
+
+body {
+  --mouse-x: 50vw;
+  --mouse-y: 50vh;
+}
+
+
+/* Keep page content above the effects */
+
+main,
+footer {
+  position: relative;
+  z-index: 2;
+}
+
+.navbar {
+  z-index: 100;
+}
+
+
+/* --------------------------------------------
+   Mouse reactive glow
+-------------------------------------------- */
+
+.mouse-glow {
+  position: fixed;
+  inset: 0;
+
+  pointer-events: none;
+
+  z-index: 1;
+
+  background:
+    radial-gradient(650px circle at var(--mouse-x) var(--mouse-y),
+      rgba(80, 245, 225, 0.09),
+      rgba(84, 183, 255, 0.035) 35%,
+      transparent 70%);
+
+  transition:
+    opacity 300ms ease;
+}
+
+
+/* Secondary bright cursor halo */
+
+.mouse-glow::after {
+  content: "";
+
+  position: fixed;
+
+  left: var(--mouse-x);
+  top: var(--mouse-y);
+
+  width: 220px;
+  height: 220px;
+
+  transform:
+    translate(-50%, -50%);
+
+  border-radius: 50%;
+
+  background:
+    radial-gradient(circle,
+      rgba(80, 245, 225, 0.08),
+      transparent 68%);
+
+  filter: blur(10px);
+
+  pointer-events: none;
+}
+
+
+/* --------------------------------------------
+   Particle canvas
+-------------------------------------------- */
+
+#particles {
+  position: fixed;
+
+  inset: 0;
+
+  width: 100%;
+  height: 100%;
+
+  pointer-events: none;
+
+  z-index: 1;
+
+  opacity: 0.65;
+}
+
+
+/* ============================================
+   Hero gets extra reactive lighting
+============================================ */
+
+.hero::before {
+  content: "";
+
+  position: absolute;
+
+  width: 750px;
+  height: 750px;
+
+  left: 50%;
+  top: 45%;
+
+  transform:
+    translate(-50%, -50%);
+
+  border-radius: 50%;
+
+  background:
+    radial-gradient(circle,
+      rgba(80, 245, 225, 0.08),
+      rgba(84, 183, 255, 0.025) 35%,
+      transparent 70%);
+
+  filter: blur(20px);
+
+  pointer-events: none;
+
+  z-index: -1;
+
+  animation:
+    hero-pulse 8s ease-in-out infinite;
+}
+
+
+@keyframes hero-pulse {
+
+  0%,
+  100% {
+    transform:
+      translate(-50%, -50%) scale(0.9);
+
+    opacity: 0.6;
+  }
+
+  50% {
+    transform:
+      translate(-50%, -50%) scale(1.15);
+
+    opacity: 1;
+  }
+
+}
+
+
+/* ============================================
+   More dynamic cards
+============================================ */
+
+.focus-card {
+  isolation: isolate;
+}
+
+
+.focus-card::before {
+  content: "";
+
+  position: absolute;
+  inset: 0;
+
+  opacity: 0;
+
+  pointer-events: none;
+
+  background:
+    radial-gradient(400px circle at var(--mouse-x) var(--mouse-y),
+      rgba(80, 245, 225, 0.08),
+      transparent 50%);
+
+  transition:
+    opacity 250ms ease;
+
+  z-index: -1;
+}
+
+
+.focus-card:hover::before {
+  opacity: 1;
+}
+
+
+.focus-card:hover .card-icon {
+  text-shadow:
+    0 0 18px rgba(80, 245, 225, 0.55);
+}
+
+
+/* ============================================
+   Page transition
+============================================ */
+
+.page-transition {
+  position: fixed;
+  inset: 0;
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(3, 1fr);
+
+  pointer-events: none;
+
+  z-index: 99999;
+}
+
+
+.page-transition span {
+  background:
+    linear-gradient(145deg,
+      #071012,
+      #0b2022 50%,
+      #0c1116);
+
+  transform:
+    scaleY(1);
+
+  transform-origin:
+    top;
+
+  transition:
+    transform 520ms cubic-bezier(0.77,
+      0,
+      0.18,
+      1);
+}
+
+
+.page-transition span:nth-child(2) {
+  transition-delay: 70ms;
+}
+
+
+.page-transition span:nth-child(3) {
+  transition-delay: 140ms;
+}
+
+
+/* Reveal website on load */
+
+body.page-ready .page-transition span {
+  transform:
+    scaleY(0);
+}
+
+
+/* Cover website when leaving */
+
+body.page-leave .page-transition span {
+  transform:
+    scaleY(1);
+
+  transform-origin:
+    bottom;
+}
+
+
+body.page-leave .page-transition span:nth-child(1) {
+  transition-delay: 0ms;
+}
+
+
+body.page-leave .page-transition span:nth-child(2) {
+  transition-delay: 70ms;
+}
+
+
+body.page-leave .page-transition span:nth-child(3) {
+  transition-delay: 140ms;
+}
+
+
+/* ============================================
+   Section transitions
+============================================ */
+
+.section {
+  transition:
+    filter 600ms ease,
+    opacity 600ms ease,
+    transform 600ms ease;
+}
+
+
+.section.reveal {
+  opacity: 0;
+
+  filter:
+    blur(8px);
+
+  transform:
+    translateY(45px) scale(0.985);
+}
+
+
+.section.reveal.visible {
+  opacity: 1;
+
+  filter:
+    blur(0);
+
+  transform:
+    translateY(0) scale(1);
+}
+
+
+/* ============================================
+   Navbar glow
+============================================ */
+
+.navbar {
+  box-shadow:
+    0 10px 50px rgba(0, 0, 0, 0.28),
+    0 0 40px rgba(80, 245, 225, 0.035);
+
+  transition:
+    border-color 250ms ease,
+    box-shadow 250ms ease,
+    background 250ms ease;
+}
+
+
+.navbar:hover {
+  border-color:
+    rgba(80, 245, 225, 0.18);
+
+  box-shadow:
+    0 15px 60px rgba(0, 0, 0, 0.36),
+    0 0 50px rgba(80, 245, 225, 0.06);
+}
+
+
+/* ============================================
+   Highlight selection
+============================================ */
+
+::selection {
+  background:
+    rgba(80, 245, 225, 0.25);
+
+  color:
+    #ffffff;
+}
+
+@media (max-height: 700px) {
+  .scroll-indicator {
+    display: none;
+  }
+}
+
+
+/* ============================================
+   Reduced motion
+============================================ */
+
+@media (prefers-reduced-motion: reduce) {
+
+  .mouse-glow,
+  #particles {
+    display: none;
+  }
+
+
+  .page-transition {
+    display: none;
+  }
+
+
+  .hero::before {
+    animation: none;
   }
 
 }
