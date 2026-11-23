@@ -4,9 +4,10 @@ import '../../core/widgets/hypr_background.dart';
 import 'widgets/focus_and_stack_section.dart';
 import 'widgets/hypr_hero.dart';
 import 'widgets/hypr_navbar.dart';
+import 'widgets/preview_workspace_banner.dart';
 import 'widgets/sub_apps_section.dart';
 
-/// Hyprland-inspired landing page serving as the hub for M3E sub-apps.
+/// Hyprland (`hypr.land`) styled landing page serving as the hub for M3E sub-apps.
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -36,7 +37,7 @@ class _HomePageState extends State<HomePage> {
           ? Duration.zero
           : const Duration(milliseconds: 450),
       curve: Curves.easeOutCubic,
-      alignment: 0.08,
+      alignment: 0.06,
     );
   }
 
@@ -57,7 +58,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: HyprBackground(
+      body: HyprPageCanvas(
         child: SelectionArea(
           child: Stack(
             children: [
@@ -65,34 +66,44 @@ class _HomePageState extends State<HomePage> {
                 controller: _scrollController,
                 child: SingleChildScrollView(
                   controller: _scrollController,
-                  padding: const EdgeInsets.fromLTRB(20, 118, 20, 40),
-                  child: Center(
-                    child: ConstrainedBox(
-                      constraints: const BoxConstraints(maxWidth: 1180),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          HyprHero(
-                            onExploreApps: () => _scrollToSection(_appsKey),
-                          ),
-                          const SizedBox(height: 92),
-                          KeyedSubtree(
-                            key: _appsKey,
-                            child: const SubAppsSection(),
-                          ),
-                          const SizedBox(height: 88),
-                          KeyedSubtree(
-                            key: _focusKey,
-                            child: const FocusSection(),
-                          ),
-                          const SizedBox(height: 88),
-                          KeyedSubtree(
-                            key: _stackKey,
-                            child: const StackAndFooterSection(),
-                          ),
-                        ],
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      HyprHero(
+                        onExploreApps: () => _scrollToSection(_appsKey),
                       ),
-                    ),
+                      Transform.translate(
+                        offset: const Offset(0, -28),
+                        child: const PreviewWorkspaceBanner(),
+                      ),
+                      const SizedBox(height: 64),
+                      Center(
+                        child: ConstrainedBox(
+                          constraints: const BoxConstraints(maxWidth: 1200),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 20),
+                            child: Column(
+                              children: [
+                                KeyedSubtree(
+                                  key: _appsKey,
+                                  child: const SubAppsSection(),
+                                ),
+                                const SizedBox(height: 112),
+                                KeyedSubtree(
+                                  key: _focusKey,
+                                  child: const FocusSection(),
+                                ),
+                                const SizedBox(height: 112),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                      KeyedSubtree(
+                        key: _stackKey,
+                        child: const StackAndFooterSection(),
+                      ),
+                    ],
                   ),
                 ),
               ),

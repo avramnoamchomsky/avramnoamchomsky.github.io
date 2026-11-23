@@ -1,94 +1,101 @@
+import 'package:flutter/services.dart';
+import 'package:go_router/go_router.dart';
+import 'package:material_3_expressive/material_3_expressive.dart';
 import 'package:material_ui/material_ui.dart';
 
 import '../../../core/theme/hypr_tokens.dart';
 import '../../../core/utils/external_link.dart';
-import '../../../core/widgets/hypr_window_frame.dart';
+import '../../../core/widgets/hypr_button.dart';
+import '../../../core/widgets/hypr_card.dart';
 import '../../../data/site_data.dart';
 
-/// Focus domains section rendered in a Hyprland-inspired tiling layout.
+/// Port of official hypr.land `InstallSlice.svelte` + focus cards + `Footer.svelte`.
 class FocusSection extends StatelessWidget {
   const FocusSection({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final tokens = Theme.of(context).extension<HyprTokens>() ?? HyprTokens.dark;
+    final tokens =
+        Theme.of(context).extension<HyprTokens>() ?? HyprTokens.official;
 
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          children: [
-            Text(
-              '02',
-              style: tokens.monoStyle(
-                fontSize: 12,
-                fontWeight: FontWeight.w700,
-                color: tokens.mint,
-              ),
-            ),
-            const SizedBox(width: 10),
-            Text(
-              'FOCUS',
-              style: tokens.monoStyle(
-                fontSize: 12,
-                color: tokens.textMuted,
-                letterSpacing: 1.6,
-              ),
-            ),
-          ],
+        Text(
+          'ENGINEERING',
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            color: tokens.slate300,
+            fontWeight: FontWeight.w800,
+            fontSize: 13.5,
+            letterSpacing: 1.4,
+          ),
+        ),
+        const SizedBox(height: 10),
+        const Text(
+          'What I explore',
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            color: Color(0xFFFFFFFF),
+            fontWeight: FontWeight.w800,
+            fontSize: 48,
+            letterSpacing: -1.3,
+            height: 1.05,
+          ),
         ),
         const SizedBox(height: 10),
         Text(
-          "What I'm exploring",
+          'Understanding machines from hardware registers up to expressive interfaces.',
+          textAlign: TextAlign.center,
           style: TextStyle(
-            color: tokens.textPrimary,
-            fontSize: 34,
-            fontWeight: FontWeight.w800,
-            letterSpacing: -0.9,
-            height: 1.08,
+            color: tokens.slate300,
+            fontWeight: FontWeight.w700,
+            fontSize: 16,
           ),
         ),
-        const SizedBox(height: 26),
+        const SizedBox(height: 40),
+
         LayoutBuilder(
           builder: (context, constraints) {
             final isDesktop = constraints.maxWidth >= 900;
             final cards = [
               for (final item in SiteData.focusDomains)
-                HyprWindowFrame(
-                  title: 'focus://${item.indexLabel}',
-                  badge: item.featured ? 'CORE' : null,
-                  padding: const EdgeInsets.all(22),
+                HyprCard(
+                  tone: item.featured ? HyprCardTone.cyan : HyprCardTone.purple,
+                  padding: const EdgeInsets.all(26),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       Text(
                         item.glyph,
                         style: tokens.monoStyle(
-                          fontSize: 28,
+                          fontSize: 30,
                           fontWeight: FontWeight.w700,
-                          color: item.featured ? tokens.mint : tokens.cyan,
+                          color: item.featured
+                              ? tokens.primary
+                              : tokens.purple400,
                         ),
                       ),
-                      const SizedBox(height: 18),
+                      const SizedBox(height: 20),
                       Text(
                         item.title,
-                        style: TextStyle(
-                          color: tokens.textPrimary,
-                          fontSize: 21,
-                          fontWeight: FontWeight.w700,
-                          letterSpacing: -0.3,
+                        style: const TextStyle(
+                          color: Color(0xFFFFFFFF),
+                          fontSize: 24,
+                          fontWeight: FontWeight.w800,
+                          letterSpacing: -0.4,
                         ),
                       ),
                       const SizedBox(height: 8),
                       Text(
                         item.description,
-                        style: TextStyle(
-                          color: tokens.textSecondary,
+                        style: const TextStyle(
+                          color: Color(0xB3FFFFFF),
                           fontSize: 14.5,
-                          height: 1.55,
+                          height: 1.5,
                         ),
                       ),
-                      const SizedBox(height: 18),
+                      const SizedBox(height: 16),
                       Wrap(
                         spacing: 8,
                         runSpacing: 8,
@@ -101,14 +108,14 @@ class FocusSection extends StatelessWidget {
                               ),
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(999),
-                                border: Border.all(color: tokens.borderIdle),
-                                color: const Color(0x0AFFFFFF),
+                                border: Border.all(color: tokens.slate800),
+                                color: tokens.black,
                               ),
                               child: Text(
                                 tag,
                                 style: tokens.monoStyle(
                                   fontSize: 11,
-                                  color: tokens.textSecondary,
+                                  color: tokens.slate300,
                                 ),
                               ),
                             ),
@@ -149,154 +156,391 @@ class FocusSection extends StatelessWidget {
   }
 }
 
-/// Environment pills, NixOS dotfiles link, and minimal footer.
+/// Official `InstallSlice.svelte` style blue-gradient container + `Footer.svelte` footer.
 class StackAndFooterSection extends StatelessWidget {
   const StackAndFooterSection({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final tokens = Theme.of(context).extension<HyprTokens>() ?? HyprTokens.dark;
+    final tokens =
+        Theme.of(context).extension<HyprTokens>() ?? HyprTokens.official;
     final year = DateTime.now().year;
 
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          children: [
-            Text(
-              '03',
-              style: tokens.monoStyle(
-                fontSize: 12,
-                fontWeight: FontWeight.w700,
-                color: tokens.mint,
-              ),
-            ),
-            const SizedBox(width: 10),
-            Text(
-              'ENVIRONMENT',
-              style: tokens.monoStyle(
-                fontSize: 12,
-                color: tokens.textMuted,
-                letterSpacing: 1.6,
-              ),
-            ),
-          ],
+        const Text(
+          'Current stack',
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            color: Color(0xFFFFFFFF),
+            fontWeight: FontWeight.w800,
+            fontSize: 48,
+            letterSpacing: -1.3,
+            height: 1.05,
+          ),
         ),
         const SizedBox(height: 10),
         Text(
-          'Current stack',
+          'NixOS, Wayland, embedded tooling & Flutter',
+          textAlign: TextAlign.center,
           style: TextStyle(
-            color: tokens.textPrimary,
-            fontSize: 34,
-            fontWeight: FontWeight.w800,
-            letterSpacing: -0.9,
-            height: 1.08,
+            color: tokens.slate300,
+            fontWeight: FontWeight.w700,
+            fontSize: 16,
           ),
         ),
-        const SizedBox(height: 22),
-        Wrap(
-          spacing: 10,
-          runSpacing: 10,
-          children: [
-            for (final tool in SiteData.environmentStack)
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 15,
-                  vertical: 9,
-                ),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(999),
-                  color: tokens.surfaceGlass,
-                  border: Border.all(color: tokens.borderIdle),
-                ),
-                child: Text(
-                  tool,
-                  style: tokens.monoStyle(
-                    fontSize: 13,
-                    color: tokens.textPrimary,
-                  ),
-                ),
+        const SizedBox(height: 36),
+
+        // Official InstallSlice.svelte container: rounded-3xl, gradient blue-500/40 -> transparent, outline blue-500
+        ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 760),
+          child: Container(
+            padding: const EdgeInsets.all(28),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(24),
+              border: Border.all(color: tokens.blue500, width: 1),
+              gradient: LinearGradient(
+                begin: Alignment.bottomLeft,
+                end: Alignment.topRight,
+                colors: [
+                  tokens.blue500.withValues(alpha: 0.38),
+                  tokens.blue500.withValues(alpha: 0.08),
+                  const Color(0x00000000),
+                ],
               ),
-          ],
-        ),
-        const SizedBox(height: 28),
-        HyprWindowFrame(
-          title: 'repo://nixos-config',
-          badge: 'GITHUB ↗',
-          onTap: () => openExternalUrl(SiteData.nixosConfigUrl),
-          padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 18),
-          child: Row(
-            children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'NixOS Configuration',
-                      style: TextStyle(
-                        color: tokens.textPrimary,
-                        fontSize: 18,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      'Declarative NixOS setup, Wayland experiments, and system tooling.',
-                      style: TextStyle(
-                        color: tokens.textSecondary,
-                        fontSize: 14,
-                      ),
-                    ),
-                  ],
+              boxShadow: const [
+                BoxShadow(
+                  color: Color(0x66000000),
+                  blurRadius: 30,
+                  offset: Offset(0, 14),
                 ),
-              ),
-              const SizedBox(width: 16),
-              Icon(Icons.north_east_rounded, color: tokens.cyan, size: 22),
-            ],
+              ],
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                _StackCommandRow(
+                  label: 'NixOS',
+                  command: 'programs.hyprland.enable = true;',
+                  subtitle: 'Declarative Flake config & Wayland workflow',
+                  tokens: tokens,
+                  linkLabel: 'nixos-config ↗',
+                  onLinkTap: () => openExternalUrl(SiteData.nixosConfigUrl),
+                ),
+                const SizedBox(height: 18),
+                _StackCommandRow(
+                  label: 'Flutter Web',
+                  command: 'flutter run -d chrome',
+                  subtitle: 'Material 3 Expressive + cross-platform Linux target',
+                  tokens: tokens,
+                  linkLabel: 'Play Snake →',
+                  onLinkTap: () => context.go('/apps/snake'),
+                ),
+                const SizedBox(height: 18),
+                _StackCommandRow(
+                  label: 'Source',
+                  command: 'git clone ${SiteData.siteRepoUrl}.git',
+                  subtitle: 'Open-source personal site hosted on GitHub Pages',
+                  tokens: tokens,
+                  linkLabel: 'Repository ↗',
+                  onLinkTap: () => openExternalUrl(SiteData.siteRepoUrl),
+                ),
+              ],
+            ),
           ),
         ),
-        const SizedBox(height: 64),
+
+        const SizedBox(height: 32),
+
+        HyprButton(
+          label: 'GitHub Profile',
+          style: HyprButtonStyle.fancyOutline,
+          size: HyprButtonSize.lg,
+          trailingIcon: Icons.north_east_rounded,
+          onPressed: () => openExternalUrl(SiteData.githubProfileUrl),
+        ),
+
+        const SizedBox(height: 96),
+
+        // Official Footer.svelte style bottom wash & 3 columns
         Container(
-          padding: const EdgeInsets.symmetric(vertical: 26),
+          width: double.infinity,
           decoration: BoxDecoration(
-            border: Border(top: BorderSide(color: tokens.borderIdle)),
+            border: Border(
+              top: BorderSide(
+                color: const Color(0xFF60A5FA).withValues(alpha: 0.5),
+              ),
+            ),
+            gradient: RadialGradient(
+              center: const Alignment(0, 1.3),
+              radius: 1.4,
+              colors: [
+                const Color(0xFF2563EB).withValues(alpha: 0.35),
+                tokens.pureBlack.withValues(alpha: 0.65),
+              ],
+            ),
           ),
-          child: Wrap(
-            alignment: WrapAlignment.spaceBetween,
-            runSpacing: 10,
-            crossAxisAlignment: WrapCrossAlignment.center,
-            children: [
-              Row(
-                mainAxisSize: MainAxisSize.min,
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 48),
+          child: Center(
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 1120),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    '>_ ',
-                    style: tokens.monoStyle(
-                      fontSize: 13,
-                      fontWeight: FontWeight.w700,
-                      color: tokens.mint,
-                    ),
+                  Wrap(
+                    spacing: 64,
+                    runSpacing: 32,
+                    children: [
+                      _FooterCol(
+                        title: 'CHOMSKY',
+                        tokens: tokens,
+                        items: [
+                          (
+                            label: 'NixOS & Embedded Systems',
+                            accent: '[ Core Focus ]',
+                            onTap: null,
+                          ),
+                          (
+                            label: 'Flutter & M3 Expressive',
+                            accent: '[ Cross-Platform ]',
+                            onTap: () => context.go('/apps/snake'),
+                          ),
+                        ],
+                      ),
+                      _FooterCol(
+                        title: 'APPS',
+                        tokens: tokens,
+                        items: [
+                          (
+                            label: 'M3E Snake',
+                            accent: 'LIVE',
+                            onTap: () => context.go('/apps/snake'),
+                          ),
+                          (
+                            label: 'Bitfield & Register Lab',
+                            accent: 'PLANNED',
+                            onTap: null,
+                          ),
+                          (
+                            label: 'chomsky@nixos Shell',
+                            accent: 'PLANNED',
+                            onTap: null,
+                          ),
+                        ],
+                      ),
+                      _FooterCol(
+                        title: 'LINKS',
+                        tokens: tokens,
+                        items: [
+                          (
+                            label: 'GitHub Profile',
+                            accent: '↗',
+                            onTap: () =>
+                                openExternalUrl(SiteData.githubProfileUrl),
+                          ),
+                          (
+                            label: 'nixos-config',
+                            accent: '↗',
+                            onTap: () =>
+                                openExternalUrl(SiteData.nixosConfigUrl),
+                          ),
+                          (
+                            label: 'Site Source',
+                            accent: '↗',
+                            onTap: () => openExternalUrl(SiteData.siteRepoUrl),
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
+                  const SizedBox(height: 36),
                   Text(
-                    'Chomsky',
+                    '© Chomsky $year  •  Built with Flutter & Material 3 Expressive  •  Inspired by hypr.land',
                     style: TextStyle(
-                      color: tokens.textPrimary,
-                      fontWeight: FontWeight.w600,
+                      color: tokens.slate400,
                       fontSize: 13.5,
+                      fontWeight: FontWeight.w500,
                     ),
                   ),
                 ],
               ),
-              Text(
-                'Embedded systems • Linux • Flutter & M3E   |   © $year',
-                style: tokens.monoStyle(
-                  fontSize: 12,
-                  color: tokens.textMuted,
-                ),
-              ),
-            ],
+            ),
           ),
         ),
+      ],
+    );
+  }
+}
+
+class _StackCommandRow extends StatelessWidget {
+  const _StackCommandRow({
+    required this.label,
+    required this.command,
+    required this.subtitle,
+    required this.tokens,
+    required this.linkLabel,
+    required this.onLinkTap,
+  });
+
+  final String label;
+  final String command;
+  final String subtitle;
+  final HyprTokens tokens;
+  final String linkLabel;
+  final VoidCallback onLinkTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final isWide = MediaQuery.sizeOf(context).width >= 680;
+    final cmdBox = Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      decoration: BoxDecoration(
+        color: tokens.black.withValues(alpha: 0.72),
+        borderRadius: BorderRadius.circular(999),
+        border: Border.all(color: tokens.primary.withValues(alpha: 0.35)),
+      ),
+      child: Row(
+        children: [
+          Text(
+            '> ',
+            style: tokens.monoStyle(
+              fontSize: 13,
+              color: tokens.slate400,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+          Expanded(
+            child: Text(
+              command,
+              overflow: TextOverflow.ellipsis,
+              style: tokens.monoStyle(fontSize: 13, color: tokens.slate200),
+            ),
+          ),
+          const SizedBox(width: 8),
+          M3EIconButton(
+            icon: Icon(Icons.copy_rounded, size: 16, color: tokens.slate300),
+            tooltip: 'Copy command',
+            variant: M3EIconButtonVariant.standard,
+            size: M3EIconButtonSize.xs,
+            onPressed: () {
+              Clipboard.setData(ClipboardData(text: command));
+              M3ESnackbar.show(context, message: 'Copied: $command');
+            },
+          ),
+        ],
+      ),
+    );
+
+    final meta = Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          label,
+          style: const TextStyle(
+            color: Color(0xFFFFFFFF),
+            fontWeight: FontWeight.w700,
+            fontSize: 17,
+          ),
+        ),
+        const SizedBox(height: 2),
+        Text(
+          subtitle,
+          style: TextStyle(color: tokens.slate300, fontSize: 13),
+        ),
+        const SizedBox(height: 6),
+        MouseRegion(
+          cursor: SystemMouseCursors.click,
+          child: GestureDetector(
+            onTap: onLinkTap,
+            child: Text(
+              linkLabel,
+              style: TextStyle(
+                color: tokens.primary,
+                fontSize: 13,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+
+    if (isWide) {
+      return Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Expanded(flex: 4, child: meta),
+          const SizedBox(width: 20),
+          Expanded(flex: 6, child: cmdBox),
+        ],
+      );
+    }
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [meta, const SizedBox(height: 10), cmdBox],
+    );
+  }
+}
+
+class _FooterCol extends StatelessWidget {
+  const _FooterCol({
+    required this.title,
+    required this.tokens,
+    required this.items,
+  });
+
+  final String title;
+  final HyprTokens tokens;
+  final List<({String label, String accent, VoidCallback? onTap})> items;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          title,
+          style: TextStyle(
+            color: tokens.slate400,
+            fontSize: 12.5,
+            fontWeight: FontWeight.w700,
+            letterSpacing: 1.0,
+          ),
+        ),
+        const SizedBox(height: 14),
+        for (final item in items) ...[
+          MouseRegion(
+            cursor: item.onTap != null
+                ? SystemMouseCursors.click
+                : SystemMouseCursors.basic,
+            child: GestureDetector(
+              onTap: item.onTap,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 4),
+                child: RichText(
+                  text: TextSpan(
+                    style: TextStyle(
+                      color: tokens.slate300,
+                      fontSize: 14.5,
+                      fontWeight: FontWeight.w500,
+                    ),
+                    children: [
+                      TextSpan(text: '${item.label} '),
+                      TextSpan(
+                        text: item.accent,
+                        style: TextStyle(
+                          color: tokens.primary,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
       ],
     );
   }

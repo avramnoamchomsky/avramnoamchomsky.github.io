@@ -267,15 +267,18 @@ class _SnakeBoardPainter extends CustomPainter {
       (food.x + 0.5) * cellW,
       (food.y + 0.5) * cellH,
     );
-    final baseRadius = math.min(cellW, cellH) * 0.34;
-    final glowRadius = baseRadius * (1.35 + 0.35 * foodPulse);
+    final baseRadius = math.min(cellW, cellH) * 0.36;
+    final glowRadius = baseRadius * (1.4 + 0.35 * foodPulse);
+    final foodColor = scheme.brightness == Brightness.dark
+        ? const Color(0xFFFF6B8B)
+        : const Color(0xFFE11D48);
 
     final glowPaint = Paint()
-      ..color = scheme.tertiary.withValues(alpha: 0.22 + 0.14 * foodPulse)
-      ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 8);
+      ..color = foodColor.withValues(alpha: 0.35 + 0.2 * foodPulse)
+      ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 10);
     canvas.drawCircle(foodCenter, glowRadius, glowPaint);
 
-    final foodPaint = Paint()..color = scheme.tertiary;
+    final foodPaint = Paint()..color = foodColor;
     canvas.drawCircle(
       foodCenter,
       baseRadius * (0.94 + 0.1 * foodPulse),

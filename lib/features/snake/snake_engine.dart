@@ -52,7 +52,7 @@ class GridPoint {
 /// Pure Dart game state & loop controller for the Snake sub-app.
 class SnakeEngine extends ChangeNotifier {
   SnakeEngine({
-    this._gridSize = 18,
+    this._gridSize = 12,
     this._speed = SnakeSpeed.normal,
     this._wrapWalls = true,
     this._showGrid = true,

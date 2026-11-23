@@ -1,14 +1,16 @@
 import 'dart:ui';
 
 import 'package:go_router/go_router.dart';
-import 'package:material_3_expressive/material_3_expressive.dart';
 import 'package:material_ui/material_ui.dart';
 
 import '../../../core/theme/hypr_tokens.dart';
 import '../../../core/utils/external_link.dart';
 import '../../../data/site_data.dart';
 
-/// Floating frosted-glass Hyprland-style top bar with workspace indicators.
+/// Port of official hypr.land `Navbar.svelte`:
+/// Left floating `bg-black/50` brand pill + right floating pill container
+/// (`bg-black/40`, subtle primary/10 outline) with links, `GitHub` outline pill,
+/// and bright `cyan-300` uppercase primary CTA pill.
 class HyprNavbar extends StatelessWidget {
   const HyprNavbar({
     super.key,
@@ -25,272 +27,260 @@ class HyprNavbar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final tokens = Theme.of(context).extension<HyprTokens>() ?? HyprTokens.dark;
+    final tokens =
+        Theme.of(context).extension<HyprTokens>() ?? HyprTokens.official;
 
-    return Center(
-      child: ConstrainedBox(
-        constraints: const BoxConstraints(maxWidth: 1180),
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(16, 14, 16, 0),
-          child: LayoutBuilder(
-            builder: (context, constraints) {
-              final width = constraints.maxWidth;
-              final showSectionLinks = width >= 840;
-              final showWorkspaces = width >= 620;
-              final compactMobile = width < 500;
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 10, 16, 0),
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final width = constraints.maxWidth;
+          final showLinks = width >= 920;
+          final showOutlineBtn = width >= 540;
+          final isNarrow = width < 440;
 
-              return ClipRRect(
-                borderRadius: BorderRadius.circular(999),
-                child: BackdropFilter(
-                  filter: ImageFilter.blur(sigmaX: 18, sigmaY: 18),
-                  child: Container(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: compactMobile ? 10 : 14,
-                      vertical: 9,
-                    ),
-                    decoration: BoxDecoration(
-                      color: const Color(0xBD080D16),
-                      borderRadius: BorderRadius.circular(999),
-                      border: Border.all(color: tokens.borderIdle),
-                      boxShadow: const [
-                        BoxShadow(
-                          color: Color(0x44000000),
-                          blurRadius: 28,
-                          offset: Offset(0, 12),
-                        ),
-                      ],
-                    ),
-                    child: Row(
-                      children: [
-                        if (showWorkspaces) ...[
-                          _NavBrand(
-                            tokens: tokens,
-                            onTap: onJumpToTop,
-                            compact: compactMobile,
+          return Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              // Left standalone translucent pill brand
+              Flexible(
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(999),
+                  child: BackdropFilter(
+                    filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12),
+                    child: MouseRegion(
+                      cursor: SystemMouseCursors.click,
+                      child: GestureDetector(
+                        onTap: onJumpToTop,
+                        child: Container(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: isNarrow ? 12 : 16,
+                            vertical: 10,
                           ),
-                          const SizedBox(width: 16),
-                          _WorkspacePills(
-                            tokens: tokens,
-                            onOpenHome: onJumpToTop,
-                            onOpenSnake: () => context.go('/apps/snake'),
+                          decoration: BoxDecoration(
+                            color: tokens.pureBlack.withValues(alpha: 0.55),
+                            borderRadius: BorderRadius.circular(999),
                           ),
-                          const Spacer(),
-                        ] else
-                          Expanded(
-                            child: Align(
-                              alignment: Alignment.centerLeft,
-                              child: _NavBrand(
-                                tokens: tokens,
-                                onTap: onJumpToTop,
-                                compact: compactMobile,
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                '>_',
+                                style: tokens.monoStyle(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w800,
+                                  color: tokens.primary,
+                                ),
                               ),
-                            ),
-                          ),
-                        if (showSectionLinks) ...[
-                          _NavLink(
-                            label: 'Apps',
-                            onTap: onJumpToApps,
-                            tokens: tokens,
-                          ),
-                          _NavLink(
-                            label: 'Focus',
-                            onTap: onJumpToFocus,
-                            tokens: tokens,
-                          ),
-                          _NavLink(
-                            label: 'Stack',
-                            onTap: onJumpToStack,
-                            tokens: tokens,
-                          ),
-                          const SizedBox(width: 8),
-                        ],
-                        M3EButton.filled(
-                          onPressed: () => context.go('/apps/snake'),
-                          size: M3EButtonSize.xs,
-                          shape: M3EButtonShape.round,
-                          icon: const Icon(
-                            Icons.videogame_asset_rounded,
-                            size: 16,
-                          ),
-                          label: const Text('Snake'),
-                          decoration: M3EButtonDecoration(
-                            backgroundGradient: WidgetStateProperty.all(
-                              LinearGradient(
-                                colors: [tokens.cyan, tokens.mint],
-                              ),
-                            ),
-                            foregroundColor: WidgetStateProperty.all(
-                              const Color(0xFF041013),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: 8),
-                        if (compactMobile)
-                          M3EIconButton(
-                            icon: Icon(
-                              Icons.north_east_rounded,
-                              size: 18,
-                              color: tokens.cyan,
-                            ),
-                            tooltip: 'GitHub Profile',
-                            variant: M3EIconButtonVariant.outlined,
-                            size: M3EIconButtonSize.xs,
-                            onPressed: () =>
-                                openExternalUrl(SiteData.githubProfileUrl),
-                          )
-                        else
-                          M3EButton.outlined(
-                            onPressed: () =>
-                                openExternalUrl(SiteData.githubProfileUrl),
-                            size: M3EButtonSize.xs,
-                            shape: M3EButtonShape.round,
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Text(
-                                  'GitHub',
+                              const SizedBox(width: 8),
+                              const Flexible(
+                                child: Text(
+                                  'chomsky',
+                                  overflow: TextOverflow.ellipsis,
                                   style: TextStyle(
-                                    color: tokens.textPrimary,
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 13,
+                                    color: Color(0xFFFFFFFF),
+                                    fontWeight: FontWeight.w700,
+                                    fontSize: 14.5,
+                                    letterSpacing: 0.4,
                                   ),
                                 ),
-                                const SizedBox(width: 4),
-                                Icon(
-                                  Icons.north_east_rounded,
-                                  size: 14,
-                                  color: tokens.cyan,
-                                ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
-                      ],
+                        ),
+                      ),
                     ),
                   ),
                 ),
-              );
-            },
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _NavBrand extends StatelessWidget {
-  const _NavBrand({
-    required this.tokens,
-    required this.onTap,
-    this.compact = false,
-  });
-
-  final HyprTokens tokens;
-  final VoidCallback onTap;
-  final bool compact;
-
-  @override
-  Widget build(BuildContext context) {
-    return MouseRegion(
-      cursor: SystemMouseCursors.click,
-      child: GestureDetector(
-        onTap: onTap,
-        child: Padding(
-          padding: EdgeInsets.symmetric(
-            horizontal: compact ? 4 : 6,
-            vertical: 4,
-          ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                '>_',
-                style: tokens.monoStyle(
-                  fontSize: compact ? 14 : 15,
-                  fontWeight: FontWeight.w800,
-                  color: tokens.mint,
-                ),
               ),
-              const SizedBox(width: 6),
-              Flexible(
-                child: Text(
-                  'chomsky',
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    color: tokens.textPrimary,
-                    fontWeight: FontWeight.w700,
-                    fontSize: compact ? 14 : 15,
-                    letterSpacing: -0.2,
+              const SizedBox(width: 8),
+
+              // Right floating nav bar pill
+              ClipRRect(
+                borderRadius: BorderRadius.circular(999),
+                child: BackdropFilter(
+                  filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12),
+                  child: Container(
+                    padding: EdgeInsets.fromLTRB(
+                      showLinks ? 20 : 8,
+                      7,
+                      7,
+                      7,
+                    ),
+                    decoration: BoxDecoration(
+                      color: tokens.pureBlack.withValues(alpha: 0.45),
+                      borderRadius: BorderRadius.circular(999),
+                      border: Border.all(
+                        color: tokens.primary.withValues(alpha: 0.14),
+                      ),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        if (showLinks) ...[
+                          _NavTextLink(
+                            label: 'Sub-Apps',
+                            tokens: tokens,
+                            onTap: onJumpToApps,
+                          ),
+                          const SizedBox(width: 18),
+                          _NavTextLink(
+                            label: 'Focus',
+                            tokens: tokens,
+                            onTap: onJumpToFocus,
+                          ),
+                          const SizedBox(width: 18),
+                          _NavTextLink(
+                            label: 'Environment',
+                            tokens: tokens,
+                            onTap: onJumpToStack,
+                          ),
+                          const SizedBox(width: 18),
+                          _SocialIconLink(
+                            icon: Icons.code_rounded,
+                            tooltip: 'GitHub Repository',
+                            tokens: tokens,
+                            onTap: () =>
+                                openExternalUrl(SiteData.siteRepoUrl),
+                          ),
+                          const SizedBox(width: 14),
+                        ],
+                        if (showOutlineBtn) ...[
+                          _NavOutlinePill(
+                            label: 'GitHub',
+                            tokens: tokens,
+                            onTap: () =>
+                                openExternalUrl(SiteData.githubProfileUrl),
+                          ),
+                          const SizedBox(width: 10),
+                        ],
+                        _NavPrimaryPill(
+                          label: isNarrow ? 'SNAKE' : 'PLAY SNAKE',
+                          tokens: tokens,
+                          onTap: () => context.go('/apps/snake'),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
             ],
-          ),
-        ),
+          );
+        },
       ),
     );
   }
 }
 
-class _WorkspacePills extends StatelessWidget {
-  const _WorkspacePills({
-    required this.tokens,
-    required this.onOpenHome,
-    required this.onOpenSnake,
-  });
-
-  final HyprTokens tokens;
-  final VoidCallback onOpenHome;
-  final VoidCallback onOpenSnake;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(3),
-      decoration: BoxDecoration(
-        color: const Color(0x6604070C),
-        borderRadius: BorderRadius.circular(999),
-        border: Border.all(color: tokens.borderIdle),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          _WorkspaceTab(
-            label: '1:home',
-            active: true,
-            tokens: tokens,
-            onTap: onOpenHome,
-          ),
-          const SizedBox(width: 4),
-          _WorkspaceTab(
-            label: '2:snake',
-            active: false,
-            tokens: tokens,
-            onTap: onOpenSnake,
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _WorkspaceTab extends StatefulWidget {
-  const _WorkspaceTab({
+class _NavTextLink extends StatefulWidget {
+  const _NavTextLink({
     required this.label,
-    required this.active,
     required this.tokens,
     required this.onTap,
   });
 
   final String label;
-  final bool active;
   final HyprTokens tokens;
   final VoidCallback onTap;
 
   @override
-  State<_WorkspaceTab> createState() => _WorkspaceTabState();
+  State<_NavTextLink> createState() => _NavTextLinkState();
 }
 
-class _WorkspaceTabState extends State<_WorkspaceTab> {
+class _NavTextLinkState extends State<_NavTextLink> {
+  bool _hovered = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return MouseRegion(
+      cursor: SystemMouseCursors.click,
+      onEnter: (_) => setState(() => _hovered = true),
+      onExit: (_) => setState(() => _hovered = false),
+      child: GestureDetector(
+        onTap: widget.onTap,
+        child: AnimatedDefaultTextStyle(
+          duration: const Duration(milliseconds: 140),
+          style: TextStyle(
+            color: _hovered
+                ? widget.tokens.cyan300
+                : const Color(0xFFFFFFFF),
+            fontWeight: FontWeight.w600,
+            fontSize: 13.5,
+          ),
+          child: Text(widget.label),
+        ),
+      ),
+    );
+  }
+}
+
+class _SocialIconLink extends StatefulWidget {
+  const _SocialIconLink({
+    required this.icon,
+    required this.tooltip,
+    required this.tokens,
+    required this.onTap,
+  });
+
+  final IconData icon;
+  final String tooltip;
+  final HyprTokens tokens;
+  final VoidCallback onTap;
+
+  @override
+  State<_SocialIconLink> createState() => _SocialIconLinkState();
+}
+
+class _SocialIconLinkState extends State<_SocialIconLink> {
+  bool _hovered = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return Tooltip(
+      message: widget.tooltip,
+      child: MouseRegion(
+        cursor: SystemMouseCursors.click,
+        onEnter: (_) => setState(() => _hovered = true),
+        onExit: (_) => setState(() => _hovered = false),
+        child: GestureDetector(
+          onTap: widget.onTap,
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 150),
+            padding: const EdgeInsets.all(6),
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: _hovered
+                  ? widget.tokens.cyan500
+                  : const Color(0x00000000),
+            ),
+            child: Icon(
+              widget.icon,
+              size: 18,
+              color: const Color(0xFFFFFFFF),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _NavOutlinePill extends StatefulWidget {
+  const _NavOutlinePill({
+    required this.label,
+    required this.tokens,
+    required this.onTap,
+  });
+
+  final String label;
+  final HyprTokens tokens;
+  final VoidCallback onTap;
+
+  @override
+  State<_NavOutlinePill> createState() => _NavOutlinePillState();
+}
+
+class _NavOutlinePillState extends State<_NavOutlinePill> {
   bool _hovered = false;
 
   @override
@@ -302,30 +292,23 @@ class _WorkspaceTabState extends State<_WorkspaceTab> {
       child: GestureDetector(
         onTap: widget.onTap,
         child: AnimatedContainer(
-          duration: const Duration(milliseconds: 160),
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+          duration: const Duration(milliseconds: 150),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(999),
-            gradient: widget.active
-                ? LinearGradient(
-                    colors: [
-                      widget.tokens.cyan.withValues(alpha: 0.25),
-                      widget.tokens.mint.withValues(alpha: 0.22),
-                    ],
-                  )
-                : null,
-            color: !widget.active && _hovered
-                ? const Color(0x16FFFFFF)
-                : null,
+            border: Border.all(
+              color: _hovered
+                  ? const Color(0xFFA5F3FC)
+                  : widget.tokens.cyan500,
+              width: 1.5,
+            ),
           ),
           child: Text(
             widget.label,
-            style: widget.tokens.monoStyle(
-              fontSize: 11.5,
-              fontWeight: widget.active ? FontWeight.w700 : FontWeight.w500,
-              color: widget.active
-                  ? widget.tokens.mint
-                  : widget.tokens.textSecondary,
+            style: const TextStyle(
+              color: Color(0xFFFFFFFF),
+              fontWeight: FontWeight.w600,
+              fontSize: 13.5,
             ),
           ),
         ),
@@ -334,22 +317,22 @@ class _WorkspaceTabState extends State<_WorkspaceTab> {
   }
 }
 
-class _NavLink extends StatefulWidget {
-  const _NavLink({
+class _NavPrimaryPill extends StatefulWidget {
+  const _NavPrimaryPill({
     required this.label,
-    required this.onTap,
     required this.tokens,
+    required this.onTap,
   });
 
   final String label;
-  final VoidCallback onTap;
   final HyprTokens tokens;
+  final VoidCallback onTap;
 
   @override
-  State<_NavLink> createState() => _NavLinkState();
+  State<_NavPrimaryPill> createState() => _NavPrimaryPillState();
 }
 
-class _NavLinkState extends State<_NavLink> {
+class _NavPrimaryPillState extends State<_NavPrimaryPill> {
   bool _hovered = false;
 
   @override
@@ -360,16 +343,22 @@ class _NavLinkState extends State<_NavLink> {
       onExit: (_) => setState(() => _hovered = false),
       child: GestureDetector(
         onTap: widget.onTap,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 150),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 9),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(999),
+            color: _hovered
+                ? const Color(0xFFA5F3FC)
+                : widget.tokens.cyan300,
+          ),
           child: Text(
             widget.label,
             style: TextStyle(
-              color: _hovered
-                  ? widget.tokens.textPrimary
-                  : widget.tokens.textSecondary,
-              fontSize: 13.5,
-              fontWeight: FontWeight.w500,
+              color: widget.tokens.black,
+              fontWeight: FontWeight.w700,
+              fontSize: 13,
+              letterSpacing: 0.6,
             ),
           ),
         ),

@@ -67,7 +67,7 @@ abstract final class SiteData {
       icon: Icons.videogame_asset_rounded,
       isLive: true,
       route: '/apps/snake',
-      accentColor: Color(0xFF00FF99),
+      accentColor: Color(0xFF58E1FF),
     ),
     SubAppEntry(
       id: 'bitfield',
@@ -80,7 +80,7 @@ abstract final class SiteData {
       tags: ['M3E', 'Embedded', 'Offline Tool'],
       icon: Icons.memory_rounded,
       isLive: false,
-      accentColor: Color(0xFF33CCFF),
+      accentColor: Color(0xFF00A2F8),
     ),
     SubAppEntry(
       id: 'shell',
@@ -93,7 +93,7 @@ abstract final class SiteData {
       tags: ['M3E', 'Markdown', 'Cross-Platform'],
       icon: Icons.terminal_rounded,
       isLive: false,
-      accentColor: Color(0xFF7B6CFF),
+      accentColor: Color(0xFFC084FC),
     ),
   ];
 
