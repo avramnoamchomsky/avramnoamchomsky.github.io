@@ -60,7 +60,7 @@ class FocusSection extends StatelessWidget {
             final cards = [
               for (final item in SiteData.focusDomains)
                 HyprCard(
-                  tone: item.featured ? HyprCardTone.cyan : HyprCardTone.purple,
+                  alwaysHighlight: item.featured,
                   padding: const EdgeInsets.all(26),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -73,7 +73,7 @@ class FocusSection extends StatelessWidget {
                           fontWeight: FontWeight.w700,
                           color: item.featured
                               ? tokens.primary
-                              : tokens.purple400,
+                              : tokens.slate300,
                         ),
                       ),
                       const SizedBox(height: 20),
@@ -191,30 +191,15 @@ class StackAndFooterSection extends StatelessWidget {
         ),
         const SizedBox(height: 36),
 
-        // Official InstallSlice.svelte container: rounded-3xl, gradient blue-500/40 -> transparent, outline blue-500
+        // Restrained matte dark container with crisp 1px slate border
         ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 760),
           child: Container(
             padding: const EdgeInsets.all(28),
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(24),
-              border: Border.all(color: tokens.blue500, width: 1),
-              gradient: LinearGradient(
-                begin: Alignment.bottomLeft,
-                end: Alignment.topRight,
-                colors: [
-                  tokens.blue500.withValues(alpha: 0.38),
-                  tokens.blue500.withValues(alpha: 0.08),
-                  const Color(0x00000000),
-                ],
-              ),
-              boxShadow: const [
-                BoxShadow(
-                  color: Color(0x66000000),
-                  blurRadius: 30,
-                  offset: Offset(0, 14),
-                ),
-              ],
+              color: tokens.surface,
+              borderRadius: BorderRadius.circular(22),
+              border: Border.all(color: tokens.slate800, width: 1.5),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -254,7 +239,7 @@ class StackAndFooterSection extends StatelessWidget {
 
         HyprButton(
           label: 'GitHub Profile',
-          style: HyprButtonStyle.fancyOutline,
+          style: HyprButtonStyle.accentOutline,
           size: HyprButtonSize.lg,
           trailingIcon: Icons.north_east_rounded,
           onPressed: () => openExternalUrl(SiteData.githubProfileUrl),
@@ -262,22 +247,13 @@ class StackAndFooterSection extends StatelessWidget {
 
         const SizedBox(height: 96),
 
-        // Official Footer.svelte style bottom wash & 3 columns
+        // Clean matte dark footer
         Container(
           width: double.infinity,
           decoration: BoxDecoration(
+            color: tokens.pureBlack,
             border: Border(
-              top: BorderSide(
-                color: const Color(0xFF60A5FA).withValues(alpha: 0.5),
-              ),
-            ),
-            gradient: RadialGradient(
-              center: const Alignment(0, 1.3),
-              radius: 1.4,
-              colors: [
-                const Color(0xFF2563EB).withValues(alpha: 0.35),
-                tokens.pureBlack.withValues(alpha: 0.65),
-              ],
+              top: BorderSide(color: tokens.slate800),
             ),
           ),
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 48),

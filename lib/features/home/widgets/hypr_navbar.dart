@@ -202,7 +202,7 @@ class _NavTextLinkState extends State<_NavTextLink> {
           duration: const Duration(milliseconds: 140),
           style: TextStyle(
             color: _hovered
-                ? widget.tokens.cyan300
+                ? widget.tokens.primary
                 : const Color(0xFFFFFFFF),
             fontWeight: FontWeight.w600,
             fontSize: 13.5,
@@ -250,7 +250,7 @@ class _SocialIconLinkState extends State<_SocialIconLink> {
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               color: _hovered
-                  ? widget.tokens.cyan500
+                  ? widget.tokens.primary.withValues(alpha: 0.2)
                   : const Color(0x00000000),
             ),
             child: Icon(
@@ -298,8 +298,8 @@ class _NavOutlinePillState extends State<_NavOutlinePill> {
             borderRadius: BorderRadius.circular(999),
             border: Border.all(
               color: _hovered
-                  ? const Color(0xFFA5F3FC)
-                  : widget.tokens.cyan500,
+                  ? widget.tokens.primary
+                  : widget.tokens.slate700,
               width: 1.5,
             ),
           ),
@@ -349,8 +349,8 @@ class _NavPrimaryPillState extends State<_NavPrimaryPill> {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(999),
             color: _hovered
-                ? const Color(0xFFA5F3FC)
-                : widget.tokens.cyan300,
+                ? const Color(0xFF8BEAFF)
+                : widget.tokens.primary,
           ),
           child: Text(
             widget.label,

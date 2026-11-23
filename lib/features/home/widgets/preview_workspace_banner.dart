@@ -3,9 +3,8 @@ import 'package:material_ui/material_ui.dart';
 
 import '../../../core/theme/hypr_tokens.dart';
 
-/// Port of official hypr.land `PreviewRiceSlice` (Image 2):
-/// Centered glowing cyan-bordered Wayland desktop preview frame peeking cleanly
-/// below the hero. Clicking launches the interactive M3E Snake sub-app.
+/// Clean obsidian Wayland desktop preview frame peeking beneath the hero.
+/// Clicking launches the interactive M3E Snake sub-app.
 class PreviewWorkspaceBanner extends StatefulWidget {
   const PreviewWorkspaceBanner({super.key});
 
@@ -32,8 +31,8 @@ class _PreviewWorkspaceBannerState extends State<PreviewWorkspaceBanner> {
               final showWaybarCenter = availWidth >= 560;
               final showRightColumn = availWidth >= 660;
               final height = availWidth >= 860
-                  ? 460.0
-                  : (availWidth >= 560 ? 360.0 : 280.0);
+                  ? 440.0
+                  : (availWidth >= 560 ? 350.0 : 280.0);
 
               return MouseRegion(
                 cursor: SystemMouseCursors.click,
@@ -42,50 +41,31 @@ class _PreviewWorkspaceBannerState extends State<PreviewWorkspaceBanner> {
                 child: GestureDetector(
                   onTap: () => context.go('/apps/snake'),
                   child: AnimatedContainer(
-                    duration: const Duration(milliseconds: 220),
+                    duration: const Duration(milliseconds: 180),
                     height: height,
                     decoration: BoxDecoration(
+                      color: tokens.pureBlack,
                       borderRadius: BorderRadius.circular(14),
                       border: Border.all(
                         color: _hovered
                             ? tokens.primary
-                            : tokens.primary.withValues(alpha: 0.72),
+                            : tokens.primary.withValues(alpha: 0.45),
                         width: 1.5,
-                      ),
-                      boxShadow: [
-                        BoxShadow(
-                          color: tokens.primary.withValues(
-                            alpha: _hovered ? 0.34 : 0.20,
-                          ),
-                          blurRadius: _hovered ? 42 : 28,
-                          spreadRadius: _hovered ? 2 : 0,
-                        ),
-                      ],
-                      gradient: const LinearGradient(
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                        colors: [
-                          Color(0xFF0B1C28),
-                          Color(0xFF0A1220),
-                          Color(0xFF0C1022),
-                        ],
                       ),
                     ),
                     clipBehavior: Clip.antiAlias,
                     child: Column(
                       children: [
-                        // Waybar-style top status bar echoing Image 2
+                        // Minimal Waybar-style top status bar
                         Container(
                           padding: const EdgeInsets.symmetric(
                             horizontal: 14,
-                            vertical: 7,
+                            vertical: 8,
                           ),
                           decoration: BoxDecoration(
-                            color: tokens.pureBlack.withValues(alpha: 0.72),
+                            color: tokens.surface,
                             border: Border(
-                              bottom: BorderSide(
-                                color: tokens.primary.withValues(alpha: 0.2),
-                              ),
+                              bottom: BorderSide(color: tokens.slate800),
                             ),
                           ),
                           child: Row(
@@ -112,11 +92,7 @@ class _PreviewWorkspaceBannerState extends State<PreviewWorkspaceBanner> {
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(999),
                                     color: tokens.black,
-                                    border: Border.all(
-                                      color: tokens.primary.withValues(
-                                        alpha: 0.35,
-                                      ),
-                                    ),
+                                    border: Border.all(color: tokens.slate800),
                                   ),
                                   child: Text(
                                     '1  2  •  3  4  5',
@@ -139,25 +115,22 @@ class _PreviewWorkspaceBannerState extends State<PreviewWorkspaceBanner> {
                           ),
                         ),
 
-                        // Tiled mock windows inside preview desktop
+                        // Tiled windows inside preview desktop
                         Expanded(
                           child: Padding(
                             padding: const EdgeInsets.all(14),
                             child: Row(
                               children: [
-                                // Left active window: M3E Snake preview
                                 Expanded(
                                   flex: 6,
                                   child: Container(
                                     padding: const EdgeInsets.all(14),
                                     decoration: BoxDecoration(
-                                      color: tokens.pureBlack.withValues(
-                                        alpha: 0.85,
-                                      ),
+                                      color: tokens.black,
                                       borderRadius: BorderRadius.circular(10),
                                       border: Border.all(
                                         color: tokens.primary.withValues(
-                                          alpha: 0.7,
+                                          alpha: 0.5,
                                         ),
                                         width: 1.5,
                                       ),
@@ -184,7 +157,7 @@ class _PreviewWorkspaceBannerState extends State<PreviewWorkspaceBanner> {
                                               'OPEN →',
                                               style: tokens.monoStyle(
                                                 fontSize: 10.5,
-                                                color: tokens.cyan300,
+                                                color: tokens.slate200,
                                                 fontWeight: FontWeight.w700,
                                               ),
                                             ),
@@ -218,8 +191,7 @@ class _PreviewWorkspaceBannerState extends State<PreviewWorkspaceBanner> {
                                             width: double.infinity,
                                             padding: const EdgeInsets.all(14),
                                             decoration: BoxDecoration(
-                                              color: tokens.pureBlack
-                                                  .withValues(alpha: 0.82),
+                                              color: tokens.black,
                                               borderRadius:
                                                   BorderRadius.circular(10),
                                               border: Border.all(
@@ -269,8 +241,7 @@ class _PreviewWorkspaceBannerState extends State<PreviewWorkspaceBanner> {
                                             width: double.infinity,
                                             padding: const EdgeInsets.all(14),
                                             decoration: BoxDecoration(
-                                              color: tokens.pureBlack
-                                                  .withValues(alpha: 0.82),
+                                              color: tokens.black,
                                               borderRadius:
                                                   BorderRadius.circular(10),
                                               border: Border.all(
@@ -377,16 +348,16 @@ class _ShowcaseSnakePainter extends CustomPainter {
       canvas.drawRRect(
         RRect.fromRectAndRadius(rect, const Radius.circular(5)),
         Paint()
-          ..color = i == 0
-              ? tokens.primary
-              : Color.lerp(tokens.primary, tokens.blue500, i / body.length)!,
+          ..color = tokens.primary.withValues(
+            alpha: i == 0 ? 1.0 : (0.78 - i * 0.07).clamp(0.28, 0.8),
+          ),
       );
     }
 
     canvas.drawCircle(
       Offset(7.5 * cell, 2.5 * cell),
-      cell * 0.35,
-      Paint()..color = tokens.cyan300,
+      cell * 0.34,
+      Paint()..color = const Color(0xFFF43F5E),
     );
   }
 

@@ -5,10 +5,8 @@ import '../../../core/theme/hypr_tokens.dart';
 import '../../../core/widgets/hypr_background.dart';
 import '../../../core/widgets/hypr_button.dart';
 
-/// Port of official hypr.land `Hero.svelte`:
-/// Full-viewport centered hero over `HyprHeroBackdrop` (top cyan flood +
-/// 3D perspective tiling wireframe wings), bold split white + `.hyprgradient`
-/// headline, `slate-400` subtitle, and `primary` + `fancyOutline` buttons.
+/// Centered hero over `HyprHeroBackdrop` with clean crisp monochrome + single
+/// ice-cyan typography (`#F8FAFC` / `#58E1FF`) and restrained rectangular CTAs.
 class HyprHero extends StatelessWidget {
   const HyprHero({
     super.key,
@@ -26,8 +24,8 @@ class HyprHero extends StatelessWidget {
     final heroHeight = (size.height * 0.86).clamp(520.0, 820.0);
 
     final titleSize = width >= 1024
-        ? 86.0
-        : (width >= 768 ? 68.0 : (width >= 520 ? 50.0 : 34.0));
+        ? 84.0
+        : (width >= 768 ? 66.0 : (width >= 520 ? 48.0 : 34.0));
     final subtitleSize = width >= 768 ? 20.0 : (width >= 520 ? 17.0 : 14.5);
 
     return Stack(
@@ -46,46 +44,26 @@ class HyprHero extends StatelessWidget {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  // Line 1: White fading softly toward cyan (`padding: 0.5rem` avoids tight-tracking clip)
-                  ShaderMask(
-                    shaderCallback: (bounds) =>
-                        tokens.heroWhiteFadeGradient.createShader(
-                          Rect.fromLTWH(0, 0, bounds.width, bounds.height),
-                        ),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      child: Text(
-                        'Low-level craft',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: titleSize,
-                          height: 1.02,
-                          letterSpacing: width < 520 ? -1.2 : -2.2,
-                          fontWeight: FontWeight.w800,
-                          color: const Color(0xFFFFFFFF),
-                        ),
-                      ),
+                  Text(
+                    'Low-level craft',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: titleSize,
+                      height: 1.02,
+                      letterSpacing: width < 520 ? -1.2 : -2.2,
+                      fontWeight: FontWeight.w800,
+                      color: const Color(0xFFF8FAFC),
                     ),
                   ),
-                  // Line 2: `.hyprgradient` (#00E6CF -> #00C4E3 -> #0081C6)
-                  ShaderMask(
-                    shaderCallback: (bounds) =>
-                        tokens.hyprGradient.createShader(
-                          Rect.fromLTWH(0, 0, bounds.width, bounds.height),
-                        ),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      child: Text(
-                        'with the looks',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: titleSize,
-                          height: 1.05,
-                          letterSpacing: width < 520 ? -1.2 : -2.2,
-                          fontWeight: FontWeight.w800,
-                          color: const Color(0xFFFFFFFF),
-                        ),
-                      ),
+                  Text(
+                    'with the looks',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: titleSize,
+                      height: 1.06,
+                      letterSpacing: width < 520 ? -1.2 : -2.2,
+                      fontWeight: FontWeight.w800,
+                      color: tokens.primary,
                     ),
                   ),
                   SizedBox(height: width < 520 ? 14 : 20),
@@ -107,7 +85,7 @@ class HyprHero extends StatelessWidget {
                   SizedBox(height: width < 520 ? 24 : 36),
 
                   Wrap(
-                    spacing: 24,
+                    spacing: 20,
                     runSpacing: 14,
                     alignment: WrapAlignment.center,
                     children: [
@@ -121,7 +99,7 @@ class HyprHero extends StatelessWidget {
                       ),
                       HyprButton(
                         label: 'Sub-Apps',
-                        style: HyprButtonStyle.fancyOutline,
+                        style: HyprButtonStyle.accentOutline,
                         size: width >= 640
                             ? HyprButtonSize.xl
                             : HyprButtonSize.lg,

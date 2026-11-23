@@ -1,15 +1,9 @@
-import 'dart:math' as math;
-
-import 'package:flutter/gestures.dart';
 import 'package:material_ui/material_ui.dart';
 
 import '../theme/hypr_tokens.dart';
 
-/// Official hypr.land `HeroBackground` port:
-/// - Top radial cyan/sky spotlight flood (`.top-light`)
-/// - 30px subtle square grid pattern (`PatternBackground`)
-/// - Left and right 3D perspective wings of outlined tiling windows in
-///   blue-500 / cyan-400 / sky-500 that glow brightly when hovered.
+/// Clean obsidian hero backdrop with subtle 30px architectural grid, understated
+/// top tint, and crisp monochrome wireframe tiling wings on wide screens.
 class HyprHeroBackdrop extends StatelessWidget {
   const HyprHeroBackdrop({super.key});
 
@@ -23,25 +17,20 @@ class HyprHeroBackdrop extends StatelessWidget {
     return Stack(
       fit: StackFit.expand,
       children: [
-        // Base deep obsidian #090B0C
         ColoredBox(color: tokens.black),
 
-        // 30px subtle grid pattern faded toward bottom (PatternBackground.svelte)
+        // Subtle 30px architectural grid
         Positioned.fill(
           child: IgnorePointer(
-            child: CustomPaint(
-              painter: _HyprGridPainter(tokens: tokens),
-            ),
+            child: CustomPaint(painter: _HyprGridPainter(tokens: tokens)),
           ),
         ),
 
-        // 3D perspective tiling window wings on desktop/tablet
+        // 3D perspective wireframe tiling wings in restrained slate/cyan
         if (showWings)
-          Positioned.fill(
-            child: _PerspectiveTilingWings(tokens: tokens),
-          ),
+          Positioned.fill(child: _PerspectiveTilingWings(tokens: tokens)),
 
-        // Center dark radial vignette so hero text remains crisp over wings
+        // Clean center vignette for effortless text contrast
         Positioned.fill(
           child: IgnorePointer(
             child: DecoratedBox(
@@ -50,8 +39,8 @@ class HyprHeroBackdrop extends StatelessWidget {
                   center: Alignment.center,
                   radius: 0.85,
                   colors: [
-                    tokens.black.withValues(alpha: 0.78),
-                    tokens.black.withValues(alpha: 0.32),
+                    tokens.black.withValues(alpha: 0.84),
+                    tokens.black.withValues(alpha: 0.40),
                     const Color(0x00090B0C),
                   ],
                   stops: const [0.0, 0.45, 1.0],
@@ -61,32 +50,31 @@ class HyprHeroBackdrop extends StatelessWidget {
           ),
         ),
 
-        // Top spotlight radial flood (.top-light in HeroBackground.svelte)
+        // Subtle single-hue top ambient light (no multi-color wash)
         Positioned.fill(
           child: IgnorePointer(
             child: DecoratedBox(
               decoration: BoxDecoration(
                 gradient: RadialGradient(
-                  center: const Alignment(0, -1.05),
-                  radius: 1.25,
+                  center: const Alignment(0, -1.1),
+                  radius: 1.1,
                   colors: [
-                    tokens.cyan500.withValues(alpha: 0.45),
-                    tokens.sky500.withValues(alpha: 0.18),
+                    tokens.primary.withValues(alpha: 0.14),
                     const Color(0x00090B0C),
                   ],
-                  stops: const [0.0, 0.48, 1.0],
+                  stops: const [0.0, 0.75],
                 ),
               ),
             ),
           ),
         ),
 
-        // Bottom fade into #090B0C page body
+        // Clean fade into page body
         Positioned(
           left: 0,
           right: 0,
           bottom: 0,
-          height: 150,
+          height: 140,
           child: IgnorePointer(
             child: DecoratedBox(
               decoration: BoxDecoration(
@@ -116,7 +104,7 @@ class _HyprGridPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     const step = 30.0;
     final paint = Paint()
-      ..color = tokens.slate400.withValues(alpha: 0.055)
+      ..color = tokens.slate400.withValues(alpha: 0.045)
       ..strokeWidth = 1.0;
 
     for (double x = 0.5; x < size.width; x += step) {
@@ -138,9 +126,8 @@ class _PerspectiveTilingWings extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final blue = tokens.blue500;
-    const cyan400 = Color(0xFF22D3EE);
-    final sky = tokens.sky500;
+    final wireIdle = tokens.slate700.withValues(alpha: 0.55);
+    final wireAccent = tokens.primary.withValues(alpha: 0.25);
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(10, 48, 10, 28),
@@ -154,8 +141,9 @@ class _PerspectiveTilingWings extends StatelessWidget {
                 ..setEntry(3, 2, 0.0016)
                 ..rotateY(0.24),
               child: _TilingColumnCluster(
-                palette: [cyan400, blue, sky],
-                seedOffset: 0,
+                idleColor: wireIdle,
+                accentColor: wireAccent,
+                hoverColor: tokens.primary,
               ),
             ),
           ),
@@ -168,8 +156,9 @@ class _PerspectiveTilingWings extends StatelessWidget {
                 ..setEntry(3, 2, 0.0016)
                 ..rotateY(-0.24),
               child: _TilingColumnCluster(
-                palette: [sky, cyan400, blue],
-                seedOffset: 3,
+                idleColor: wireIdle,
+                accentColor: wireAccent,
+                hoverColor: tokens.primary,
               ),
             ),
           ),
@@ -181,12 +170,14 @@ class _PerspectiveTilingWings extends StatelessWidget {
 
 class _TilingColumnCluster extends StatelessWidget {
   const _TilingColumnCluster({
-    required this.palette,
-    required this.seedOffset,
+    required this.idleColor,
+    required this.accentColor,
+    required this.hoverColor,
   });
 
-  final List<Color> palette;
-  final int seedOffset;
+  final Color idleColor;
+  final Color accentColor;
+  final Color hoverColor;
 
   @override
   Widget build(BuildContext context) {
@@ -197,9 +188,7 @@ class _TilingColumnCluster extends StatelessWidget {
             children: [
               Expanded(
                 flex: 3,
-                child: _NeonWireTile(
-                  color: palette[(0 + seedOffset) % palette.length],
-                ),
+                child: _WireTile(idleColor: accentColor, hoverColor: hoverColor),
               ),
               const SizedBox(width: 8),
               Expanded(
@@ -207,14 +196,16 @@ class _TilingColumnCluster extends StatelessWidget {
                 child: Column(
                   children: [
                     Expanded(
-                      child: _NeonWireTile(
-                        color: palette[(1 + seedOffset) % palette.length],
+                      child: _WireTile(
+                        idleColor: idleColor,
+                        hoverColor: hoverColor,
                       ),
                     ),
                     const SizedBox(height: 8),
                     Expanded(
-                      child: _NeonWireTile(
-                        color: palette[(2 + seedOffset) % palette.length],
+                      child: _WireTile(
+                        idleColor: accentColor,
+                        hoverColor: hoverColor,
                       ),
                     ),
                   ],
@@ -232,14 +223,16 @@ class _TilingColumnCluster extends StatelessWidget {
                 child: Column(
                   children: [
                     Expanded(
-                      child: _NeonWireTile(
-                        color: palette[(2 + seedOffset) % palette.length],
+                      child: _WireTile(
+                        idleColor: idleColor,
+                        hoverColor: hoverColor,
                       ),
                     ),
                     const SizedBox(height: 8),
                     Expanded(
-                      child: _NeonWireTile(
-                        color: palette[(0 + seedOffset) % palette.length],
+                      child: _WireTile(
+                        idleColor: accentColor,
+                        hoverColor: hoverColor,
                       ),
                     ),
                   ],
@@ -248,9 +241,7 @@ class _TilingColumnCluster extends StatelessWidget {
               const SizedBox(width: 8),
               Expanded(
                 flex: 3,
-                child: _NeonWireTile(
-                  color: palette[(1 + seedOffset) % palette.length],
-                ),
+                child: _WireTile(idleColor: idleColor, hoverColor: hoverColor),
               ),
             ],
           ),
@@ -260,16 +251,20 @@ class _TilingColumnCluster extends StatelessWidget {
   }
 }
 
-class _NeonWireTile extends StatefulWidget {
-  const _NeonWireTile({required this.color});
+class _WireTile extends StatefulWidget {
+  const _WireTile({
+    required this.idleColor,
+    required this.hoverColor,
+  });
 
-  final Color color;
+  final Color idleColor;
+  final Color hoverColor;
 
   @override
-  State<_NeonWireTile> createState() => _NeonWireTileState();
+  State<_WireTile> createState() => _WireTileState();
 }
 
-class _NeonWireTileState extends State<_NeonWireTile> {
+class _WireTileState extends State<_WireTile> {
   bool _hovered = false;
 
   @override
@@ -280,33 +275,21 @@ class _NeonWireTileState extends State<_NeonWireTile> {
       onEnter: (_) => setState(() => _hovered = true),
       onExit: (_) => setState(() => _hovered = false),
       child: AnimatedScale(
-        scale: (_hovered && !disableMotion) ? 1.02 : 1.0,
-        duration: const Duration(milliseconds: 350),
+        scale: (_hovered && !disableMotion) ? 1.015 : 1.0,
+        duration: const Duration(milliseconds: 260),
         curve: Curves.easeOutCubic,
         child: AnimatedContainer(
-          duration: const Duration(milliseconds: 350),
-          curve: Curves.easeInOut,
+          duration: const Duration(milliseconds: 260),
+          curve: Curves.easeOutCubic,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(12),
             color: _hovered
-                ? widget.color.withValues(alpha: 0.22)
+                ? widget.hoverColor.withValues(alpha: 0.08)
                 : const Color(0x00000000),
             border: Border.all(
-              color: widget.color.withValues(alpha: _hovered ? 1.0 : 0.45),
-              width: 2,
+              color: _hovered ? widget.hoverColor : widget.idleColor,
+              width: 1.5,
             ),
-            boxShadow: _hovered
-                ? [
-                    BoxShadow(
-                      color: widget.color.withValues(alpha: 0.7),
-                      blurRadius: 12,
-                    ),
-                    BoxShadow(
-                      color: widget.color.withValues(alpha: 0.45),
-                      blurRadius: 36,
-                    ),
-                  ]
-                : const [],
           ),
         ),
       ),
@@ -314,89 +297,17 @@ class _NeonWireTileState extends State<_NeonWireTile> {
   }
 }
 
-/// Page-wide subtle pointer glow + 30px pattern background matching `PatternBackground.svelte`.
-class HyprPageCanvas extends StatefulWidget {
+/// Clean matte dark page wrapper without rainbow pointer gradients.
+class HyprPageCanvas extends StatelessWidget {
   const HyprPageCanvas({super.key, required this.child});
 
   final Widget child;
 
   @override
-  State<HyprPageCanvas> createState() => _HyprPageCanvasState();
-}
-
-class _HyprPageCanvasState extends State<HyprPageCanvas> {
-  Offset? _pointerPos;
-
-  void _onHover(PointerHoverEvent event) {
-    if (event.kind != PointerDeviceKind.mouse) return;
-    setState(() => _pointerPos = event.localPosition);
-  }
-
-  @override
   Widget build(BuildContext context) {
     final tokens =
         Theme.of(context).extension<HyprTokens>() ?? HyprTokens.official;
-    final disableMotion = MediaQuery.disableAnimationsOf(context);
 
-    return ColoredBox(
-      color: tokens.black,
-      child: MouseRegion(
-        opaque: false,
-        onHover: disableMotion ? null : _onHover,
-        onExit: (_) => setState(() => _pointerPos = null),
-        child: Stack(
-          fit: StackFit.expand,
-          children: [
-            if (_pointerPos != null && !disableMotion)
-              Positioned.fill(
-                child: IgnorePointer(
-                  child: CustomPaint(
-                    painter: _PointerAuraPainter(
-                      pointerPos: _pointerPos!,
-                      tokens: tokens,
-                    ),
-                  ),
-                ),
-              ),
-            widget.child,
-          ],
-        ),
-      ),
-    );
+    return ColoredBox(color: tokens.black, child: child);
   }
-}
-
-class _PointerAuraPainter extends CustomPainter {
-  const _PointerAuraPainter({
-    required this.pointerPos,
-    required this.tokens,
-  });
-
-  final Offset pointerPos;
-  final HyprTokens tokens;
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final rect = Offset.zero & size;
-    final align = Alignment(
-      (pointerPos.dx / math.max(1, size.width)) * 2 - 1,
-      (pointerPos.dy / math.max(1, size.height)) * 2 - 1,
-    );
-    final paint = Paint()
-      ..shader = RadialGradient(
-        center: align,
-        radius: 0.42,
-        colors: [
-          tokens.cyan300.withValues(alpha: 0.08),
-          tokens.blue500.withValues(alpha: 0.03),
-          const Color(0x00000000),
-        ],
-        stops: const [0.0, 0.45, 1.0],
-      ).createShader(rect);
-    canvas.drawRect(rect, paint);
-  }
-
-  @override
-  bool shouldRepaint(covariant _PointerAuraPainter oldDelegate) =>
-      oldDelegate.pointerPos != pointerPos;
 }

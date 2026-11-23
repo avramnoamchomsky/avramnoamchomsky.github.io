@@ -80,7 +80,7 @@ abstract final class SiteData {
       tags: ['M3E', 'Embedded', 'Offline Tool'],
       icon: Icons.memory_rounded,
       isLive: false,
-      accentColor: Color(0xFF00A2F8),
+      accentColor: Color(0xFF94A3B8),
     ),
     SubAppEntry(
       id: 'shell',
@@ -93,7 +93,7 @@ abstract final class SiteData {
       tags: ['M3E', 'Markdown', 'Cross-Platform'],
       icon: Icons.terminal_rounded,
       isLive: false,
-      accentColor: Color(0xFFC084FC),
+      accentColor: Color(0xFF94A3B8),
     ),
   ];
 

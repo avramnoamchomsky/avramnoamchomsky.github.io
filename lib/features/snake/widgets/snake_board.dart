@@ -261,31 +261,35 @@ class _SnakeBoardPainter extends CustomPainter {
       }
     }
 
-    // Draw expressive pulsing food orb
+    // Draw clean single-hue food orb
     final food = engine.food;
     final foodCenter = Offset(
       (food.x + 0.5) * cellW,
       (food.y + 0.5) * cellH,
     );
-    final baseRadius = math.min(cellW, cellH) * 0.36;
-    final glowRadius = baseRadius * (1.4 + 0.35 * foodPulse);
+    final baseRadius = math.min(cellW, cellH) * 0.34;
     final foodColor = scheme.brightness == Brightness.dark
-        ? const Color(0xFFFF6B8B)
+        ? const Color(0xFFF43F5E)
         : const Color(0xFFE11D48);
 
-    final glowPaint = Paint()
-      ..color = foodColor.withValues(alpha: 0.35 + 0.2 * foodPulse)
-      ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 10);
-    canvas.drawCircle(foodCenter, glowRadius, glowPaint);
+    final ringPaint = Paint()
+      ..color = foodColor.withValues(alpha: 0.35 + 0.25 * foodPulse)
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 2.0;
+    canvas.drawCircle(
+      foodCenter,
+      baseRadius * (1.22 + 0.14 * foodPulse),
+      ringPaint,
+    );
 
     final foodPaint = Paint()..color = foodColor;
     canvas.drawCircle(
       foodCenter,
-      baseRadius * (0.94 + 0.1 * foodPulse),
+      baseRadius * (0.94 + 0.08 * foodPulse),
       foodPaint,
     );
 
-    // Draw snake body from tail to head so head sits cleanly on top
+    // Draw snake body from tail to head using clean single-hue opacity steps
     final snake = engine.snake;
     final total = snake.length;
     for (var i = total - 1; i >= 0; i--) {
@@ -304,11 +308,7 @@ class _SnakeBoardPainter extends CustomPainter {
 
       final segmentColor = i == 0
           ? scheme.primary
-          : Color.lerp(
-              scheme.primary.withValues(alpha: 0.88),
-              scheme.secondaryContainer,
-              t * 0.72,
-            )!;
+          : scheme.primary.withValues(alpha: (0.82 - t * 0.48).clamp(0.32, 0.85));
 
       final paint = Paint()..color = segmentColor;
       canvas.drawRRect(RRect.fromRectAndRadius(rect, radius), paint);

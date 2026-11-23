@@ -6,10 +6,8 @@ import '../../../core/theme/hypr_tokens.dart';
 import '../../../core/widgets/hypr_card.dart';
 import '../../../data/site_data.dart';
 
-/// Port of official hypr.land `FeaturesSlice.svelte`:
-/// Centered TitlePre + TitleHeading, asymmetric 2-column Bento grid of pure-black
-/// `HyprCard`s (tall left featured card + 2 stacked right cards) with content
-/// anchored bottom-left, followed by icon+label focus highlights.
+/// Asymmetric Bento grid of sub-apps using crisp matte `HyprCard`s and sharp
+/// monochrome geometric line motifs (zero blurry rainbow gradients).
 class SubAppsSection extends StatelessWidget {
   const SubAppsSection({super.key});
 
@@ -65,25 +63,22 @@ class SubAppsSection extends StatelessWidget {
               app: snakeApp,
               tokens: tokens,
               tall: isDesktop,
-              tone: HyprCardTone.cyan,
               onTap: () => _openSubApp(context, snakeApp),
             );
             final topRightCard = _BentoAppCard(
               app: bitfieldApp,
               tokens: tokens,
-              tone: HyprCardTone.purple,
               onTap: () => _openSubApp(context, bitfieldApp),
             );
             final bottomRightCard = _BentoAppCard(
               app: shellApp,
               tokens: tokens,
-              tone: HyprCardTone.purple,
               onTap: () => _openSubApp(context, shellApp),
             );
 
             if (isDesktop) {
               return SizedBox(
-                height: 540,
+                height: 520,
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
@@ -127,7 +122,6 @@ class SubAppsSection extends StatelessWidget {
 
         const SizedBox(height: 48),
 
-        // Official FeaturesSlice-style horizontal icon + label focus row
         Wrap(
           spacing: 32,
           runSpacing: 18,
@@ -195,40 +189,37 @@ class _BentoAppCard extends StatelessWidget {
   const _BentoAppCard({
     required this.app,
     required this.tokens,
-    required this.tone,
     required this.onTap,
     this.tall = false,
   });
 
   final SubAppEntry app;
   final HyprTokens tokens;
-  final HyprCardTone tone;
   final VoidCallback onTap;
   final bool tall;
 
   @override
   Widget build(BuildContext context) {
     return HyprCard(
-      tone: tone,
-      alwaysHighlight: false,
+      alwaysHighlight: app.isLive,
       onTap: onTap,
-      padding: const EdgeInsets.all(34),
+      padding: const EdgeInsets.all(32),
       child: Stack(
         children: [
-          // Soft glowing geometric background motif echoing Image 3 (`Smooth` / `</>` / `[ ]`)
+          // Crisp minimalist monochrome geometric line motif (zero rainbow blur)
           Positioned(
-            right: tall ? -18 : -10,
-            top: tall ? 36 : -4,
+            right: tall ? 0 : -4,
+            top: tall ? 20 : 0,
             child: IgnorePointer(
               child: _CardMotifArtwork(
                 appId: app.id,
                 tall: tall,
                 tokens: tokens,
+                accent: app.isLive,
               ),
             ),
           ),
 
-          // Content anchored cleanly at bottom-left like hypr.land `Features` cards
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.end,
@@ -238,9 +229,9 @@ class _BentoAppCard extends StatelessWidget {
                 style: TextStyle(
                   color: const Color(0xFFFFFFFF),
                   fontWeight: FontWeight.w800,
-                  fontSize: tall ? 48 : 30,
+                  fontSize: tall ? 46 : 28,
                   letterSpacing: -1.0,
-                  height: 1.04,
+                  height: 1.05,
                 ),
               ),
               const SizedBox(height: 12),
@@ -250,16 +241,16 @@ class _BentoAppCard extends StatelessWidget {
                   app.description,
                   maxLines: tall ? 4 : 3,
                   overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
-                    color: Color(0xB3FFFFFF),
-                    fontSize: 15.5,
+                  style: TextStyle(
+                    color: tokens.slate400,
+                    fontSize: 15,
                     fontWeight: FontWeight.w500,
-                    height: 1.45,
+                    height: 1.48,
                   ),
                 ),
               ),
-              if (app.isLive) ...[
-                const SizedBox(height: 16),
+              const SizedBox(height: 16),
+              if (app.isLive)
                 Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -278,8 +269,17 @@ class _BentoAppCard extends StatelessWidget {
                       color: tokens.primary,
                     ),
                   ],
+                )
+              else
+                Text(
+                  'PLANNED',
+                  style: tokens.monoStyle(
+                    fontSize: 11,
+                    color: tokens.slate700,
+                    fontWeight: FontWeight.w700,
+                    letterSpacing: 1.0,
+                  ),
                 ),
-              ],
             ],
           ),
         ],
@@ -293,105 +293,95 @@ class _CardMotifArtwork extends StatelessWidget {
     required this.appId,
     required this.tall,
     required this.tokens,
+    required this.accent,
   });
 
   final String appId;
   final bool tall;
   final HyprTokens tokens;
+  final bool accent;
 
   @override
   Widget build(BuildContext context) {
-    final size = tall ? 290.0 : 185.0;
+    final size = tall ? 240.0 : 150.0;
     return SizedBox(
       width: size,
       height: size,
       child: CustomPaint(
-        painter: _CardMotifPainter(appId: appId, tokens: tokens),
+        painter: _CardMotifPainter(
+          appId: appId,
+          tokens: tokens,
+          accent: accent,
+        ),
       ),
     );
   }
 }
 
 class _CardMotifPainter extends CustomPainter {
-  const _CardMotifPainter({required this.appId, required this.tokens});
+  const _CardMotifPainter({
+    required this.appId,
+    required this.tokens,
+    required this.accent,
+  });
 
   final String appId;
   final HyprTokens tokens;
+  final bool accent;
 
   @override
   void paint(Canvas canvas, Size size) {
-    final rect = Offset.zero & size;
-    final grad = LinearGradient(
-      begin: Alignment.topLeft,
-      end: Alignment.bottomRight,
-      colors: [
-        tokens.purple400.withValues(alpha: 0.42),
-        tokens.blue500.withValues(alpha: 0.42),
-        tokens.cyan500.withValues(alpha: 0.46),
-      ],
-    ).createShader(rect);
-
-    final glowPaint = Paint()
-      ..shader = grad
-      ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 18);
+    final strokeColor = accent
+        ? tokens.primary.withValues(alpha: 0.24)
+        : tokens.slate700.withValues(alpha: 0.35);
 
     final crispPaint = Paint()
-      ..shader = grad
+      ..color = strokeColor
       ..style = PaintingStyle.stroke
-      ..strokeWidth = size.width * 0.085
+      ..strokeWidth = size.width * 0.055
       ..strokeCap = StrokeCap.round
       ..strokeJoin = StrokeJoin.round;
 
     if (appId == 'snake') {
-      // Soft glowing orb + stylized curved snake silhouette (matching Image 3 left card)
-      canvas.drawCircle(rect.center, size.width * 0.36, glowPaint);
       final path = Path()
-        ..moveTo(size.width * 0.25, size.height * 0.65)
-        ..cubicTo(
-          size.width * 0.25,
-          size.height * 0.25,
-          size.width * 0.72,
-          size.height * 0.72,
-          size.width * 0.74,
-          size.height * 0.34,
-        );
+        ..moveTo(size.width * 0.22, size.height * 0.68)
+        ..lineTo(size.width * 0.22, size.height * 0.42)
+        ..lineTo(size.width * 0.56, size.height * 0.42)
+        ..lineTo(size.width * 0.56, size.height * 0.20)
+        ..lineTo(size.width * 0.80, size.height * 0.20);
       canvas.drawPath(path, crispPaint);
       canvas.drawCircle(
-        Offset(size.width * 0.33, size.height * 0.35),
-        size.width * 0.07,
-        Paint()..color = tokens.primary.withValues(alpha: 0.55),
+        Offset(size.width * 0.78, size.height * 0.66),
+        size.width * 0.06,
+        Paint()..color = tokens.primary.withValues(alpha: 0.32),
       );
       return;
     }
 
     if (appId == 'bitfield') {
-      // Soft glowing `<>` brackets (matching Image 3 top-right `Easy to configure`)
-      canvas.drawCircle(rect.center, size.width * 0.32, glowPaint);
       final left = Path()
-        ..moveTo(size.width * 0.42, size.height * 0.22)
-        ..lineTo(size.width * 0.16, size.height * 0.50)
-        ..lineTo(size.width * 0.42, size.height * 0.78);
+        ..moveTo(size.width * 0.42, size.height * 0.24)
+        ..lineTo(size.width * 0.18, size.height * 0.50)
+        ..lineTo(size.width * 0.42, size.height * 0.76);
       final right = Path()
-        ..moveTo(size.width * 0.58, size.height * 0.22)
-        ..lineTo(size.width * 0.84, size.height * 0.50)
-        ..lineTo(size.width * 0.58, size.height * 0.78);
+        ..moveTo(size.width * 0.58, size.height * 0.24)
+        ..lineTo(size.width * 0.82, size.height * 0.50)
+        ..lineTo(size.width * 0.58, size.height * 0.76);
       canvas.drawPath(left, crispPaint);
       canvas.drawPath(right, crispPaint);
       return;
     }
 
-    // Soft glowing `[ ]` brackets (matching Image 3 bottom-right `Dynamic tiling`)
-    canvas.drawCircle(rect.center, size.width * 0.32, glowPaint);
     final left = Path()
-      ..moveTo(size.width * 0.40, size.height * 0.20)
-      ..lineTo(size.width * 0.20, size.height * 0.20)
-      ..lineTo(size.width * 0.20, size.height * 0.80)
-      ..lineTo(size.width * 0.40, size.height * 0.80);
+      ..moveTo(size.width * 0.40, size.height * 0.22)
+      ..lineTo(size.width * 0.22, size.height * 0.22)
+      ..lineTo(size.width * 0.22, size.height * 0.78)
+      ..lineTo(size.width * 0.40, size.height * 0.78);
     final right = Path()
-      ..moveTo(size.width * 0.60, size.height * 0.20)
-      ..lineTo(size.width * 0.80, size.height * 0.20)
-      ..lineTo(size.width * 0.80, size.height * 0.80)
-      ..lineTo(size.width * 0.60, size.height * 0.80);
+      ..moveTo(size.width * 0.60, size.height * 0.22)
+      ..lineTo(size.width * 0.78, size.height * 0.22)
+      ..lineTo(size.width * 0.78, size.height * 0.78)
+      ..lineTo(size.width * 0.60, size.height * 0.78);
     canvas.drawPath(left, crispPaint);
     canvas.drawPath(right, crispPaint);
   }
